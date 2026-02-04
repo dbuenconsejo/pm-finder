@@ -8,7 +8,8 @@ export default function InputLabel({
         <label
             {...props}
             className={
-                `block text-sm font-medium text-[var(--text-secondary)] ` +
+                `block text-sm font-semibold text-foreground mb-2 ` +
+                `transition-colors duration-200 ` +
                 className
             }
         >

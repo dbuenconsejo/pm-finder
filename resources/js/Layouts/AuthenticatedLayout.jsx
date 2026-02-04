@@ -6,37 +6,8 @@ import NotificationBell from '@/Components/NotificationBell';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { useTheme } from '@/Contexts/ThemeContext';
-
-// Icons
-const SunIcon = () => (
-    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-    </svg>
-);
-
-const MoonIcon = () => (
-    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-    </svg>
-);
-
-const MenuIcon = () => (
-    <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-);
-
-const CloseIcon = () => (
-    <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-);
-
-const ChevronDownIcon = () => (
-    <svg className="w-4 h-4" fill="none" viewBox="0 0 20 20" stroke="currentColor">
-        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" fill="currentColor" />
-    </svg>
-);
+import { Sun, Moon, Menu, X, ChevronDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
@@ -44,13 +15,23 @@ export default function AuthenticatedLayout({ header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
-        <div className="min-h-screen bg-[var(--background)] hex-pattern">
-            <nav className="border-b border-[var(--layer-3)] bg-[var(--layer-1)]">
+        <div className="min-h-screen bg-background relative">
+            {/* Background decorations */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+                <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-primary/15 to-purple-500/10 rounded-full blur-3xl" />
+                <div className="absolute top-1/3 -left-40 w-80 h-80 bg-gradient-to-tr from-violet-500/10 to-pink-500/5 rounded-full blur-3xl" />
+                <div className="absolute bottom-20 right-1/4 w-72 h-72 bg-gradient-to-tl from-cyan-500/10 to-primary/5 rounded-full blur-3xl" />
+                
+                {/* Subtle grid pattern */}
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.08)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.08)_1px,transparent_1px)] bg-[size:48px_48px]" />
+            </div>
+
+            <nav className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-sm">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
-                                <Link href="/">
+                                <Link href="/" className="hover:opacity-80 transition-opacity duration-300">
                                     <ApplicationLogo className="block h-9 w-auto" />
                                 </Link>
                             </div>
@@ -83,10 +64,10 @@ export default function AuthenticatedLayout({ header, children }) {
                             {/* Dark Mode Toggle */}
                             <button
                                 onClick={toggleDarkMode}
-                                className="p-2 rounded-lg text-[var(--text-secondary)] hover:text-amber-500 hover:bg-[var(--layer-2)] transition-colors"
+                                className="p-2.5 rounded-xl border border-transparent text-muted-foreground hover:text-primary hover:bg-primary/5 hover:border-primary/30 transition-all duration-300"
                                 title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
                             >
-                                {darkMode ? <SunIcon /> : <MoonIcon />}
+                                {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                             </button>
 
                             {/* Notification Bell */}
@@ -95,16 +76,16 @@ export default function AuthenticatedLayout({ header, children }) {
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
+                                        <span className="inline-flex rounded-xl">
                                             <button
                                                 type="button"
-                                                className="inline-flex items-center gap-2 rounded-lg border border-[var(--layer-3)] bg-[var(--layer-1)] px-3 py-2 text-sm font-medium text-[var(--text-secondary)] transition duration-150 ease-in-out hover:text-amber-500 hover:border-amber-500 focus:outline-none"
+                                                className="group inline-flex items-center gap-2 rounded-xl border border-border/50 bg-card px-3 py-2 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 focus:outline-none"
                                             >
-                                                <span className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500 font-semibold">
+                                                <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-semibold text-sm shadow-md shadow-primary/25 group-hover:shadow-lg group-hover:shadow-primary/30 transition-shadow">
                                                     {user.name?.[0]?.toUpperCase() || 'U'}
                                                 </span>
-                                                {user.name}
-                                                <ChevronDownIcon />
+                                                <span className="hidden lg:inline">{user.name}</span>
+                                                <ChevronDown className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
                                             </button>
                                         </span>
                                     </Dropdown.Trigger>
@@ -129,23 +110,23 @@ export default function AuthenticatedLayout({ header, children }) {
                             {/* Mobile Dark Mode Toggle */}
                             <button
                                 onClick={toggleDarkMode}
-                                className="p-2 rounded-lg text-[var(--text-secondary)] hover:text-amber-500 transition-colors"
+                                className="p-2.5 rounded-xl text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all duration-300"
                             >
-                                {darkMode ? <SunIcon /> : <MoonIcon />}
+                                {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                             </button>
 
                             <button
                                 onClick={() => setShowingNavigationDropdown(!showingNavigationDropdown)}
-                                className="inline-flex items-center justify-center rounded-md p-2 text-[var(--text-tertiary)] transition duration-150 ease-in-out hover:bg-[var(--layer-2)] hover:text-[var(--text-primary)] focus:bg-[var(--layer-2)] focus:text-[var(--text-primary)] focus:outline-none"
+                                className="inline-flex items-center justify-center rounded-xl p-2.5 text-muted-foreground transition-all duration-300 hover:bg-primary/5 hover:text-primary focus:bg-primary/5 focus:text-primary focus:outline-none"
                             >
-                                {showingNavigationDropdown ? <CloseIcon /> : <MenuIcon />}
+                                {showingNavigationDropdown ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
-                    <div className="space-y-1 pb-3 pt-2 border-t border-[var(--layer-3)]">
+                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden border-t border-border/50 bg-card/95 backdrop-blur-md'}>
+                    <div className="space-y-1 py-3">
                         <ResponsiveNavLink
                             href={route('dashboard')}
                             active={route().current('dashboard')}
@@ -168,22 +149,22 @@ export default function AuthenticatedLayout({ header, children }) {
                         )}
                     </div>
 
-                    <div className="border-t border-[var(--layer-3)] pb-1 pt-4">
+                    <div className="border-t border-border/50 py-4">
                         <div className="px-4 flex items-center gap-3">
-                            <span className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500 font-semibold">
+                            <span className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-semibold text-lg shadow-lg shadow-primary/25">
                                 {user.name?.[0]?.toUpperCase() || 'U'}
                             </span>
                             <div>
-                                <div className="text-base font-medium text-[var(--text-primary)]">
+                                <div className="text-base font-semibold text-foreground">
                                     {user.name}
                                 </div>
-                                <div className="text-sm font-medium text-[var(--text-tertiary)]">
+                                <div className="text-sm text-muted-foreground">
                                     {user.email}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="mt-3 space-y-1">
+                        <div className="mt-4 space-y-1">
                             <ResponsiveNavLink href={route('profile.edit')}>
                                 Profile
                             </ResponsiveNavLink>
@@ -200,14 +181,14 @@ export default function AuthenticatedLayout({ header, children }) {
             </nav>
 
             {header && (
-                <header className="bg-[var(--layer-1)] border-b border-[var(--layer-3)]">
+                <header className="relative z-10 bg-card border-b border-border">
                     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                         {header}
                     </div>
                 </header>
             )}
 
-            <main>{children}</main>
+            <main className="relative z-10">{children}</main>
         </div>
     );
 }

@@ -17,7 +17,7 @@ export default function InquiryCreate({ propertyManager }) {
 
     return (
         <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-[var(--text-primary)]">Send Inquiry</h2>}
+            header={<h2 className="text-xl font-semibold leading-tight text-[foreground]">Send Inquiry</h2>}
         >
             <Head title="Send Inquiry" />
 
@@ -25,15 +25,15 @@ export default function InquiryCreate({ propertyManager }) {
                 <div className="mx-auto max-w-2xl sm:px-6 lg:px-8">
                     <div className="card">
                         {/* PM Info */}
-                        <div className="border-b border-[var(--border-color)] bg-[var(--layer-02)] px-6 py-4">
+                        <div className="border-b border-[border] bg-[var(--layer-02)] px-6 py-4">
                             <div className="flex items-center space-x-4">
-                                <div className="h-12 w-12 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center border-2 border-amber-400">
-                                    <span className="text-xl font-bold text-amber-600 dark:text-amber-400">
+                                <div className="h-12 w-12 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center border-2 border-primary/80">
+                                    <span className="text-xl font-bold text-primary dark:text-primary/80">
                                         {propertyManager.business_name?.[0] || propertyManager.user?.name?.[0] || 'P'}
                                     </span>
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-[var(--text-primary)]">
+                                    <h3 className="font-semibold text-[foreground]">
                                         Send Inquiry to {propertyManager.business_name || propertyManager.user?.name}
                                     </h3>
                                     <p className="text-sm text-[var(--text-muted)]">
@@ -46,7 +46,7 @@ export default function InquiryCreate({ propertyManager }) {
                         <form onSubmit={handleSubmit} className="p-6 space-y-6">
                             {/* Subject */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Subject *</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">Subject *</label>
                                 <input
                                     type="text"
                                     value={data.subject}
@@ -60,7 +60,7 @@ export default function InquiryCreate({ propertyManager }) {
 
                             {/* Property Type */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Property Type</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">Property Type</label>
                                 <select
                                     value={data.property_type}
                                     onChange={(e) => setData('property_type', e.target.value)}
@@ -76,7 +76,7 @@ export default function InquiryCreate({ propertyManager }) {
 
                             {/* Property Location */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Property Location</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">Property Location</label>
                                 <input
                                     type="text"
                                     value={data.property_location}
@@ -88,7 +88,7 @@ export default function InquiryCreate({ propertyManager }) {
 
                             {/* Message */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Message *</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">Message *</label>
                                 <textarea
                                     value={data.message}
                                     onChange={(e) => setData('message', e.target.value)}

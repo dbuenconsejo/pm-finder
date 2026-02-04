@@ -8,28 +8,28 @@ export default function VerificationQueue({ pendingManagers }) {
 
     return (
         <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-[var(--text-primary)]">Verification Queue</h2>}
+            header={<h2 className="text-xl font-semibold leading-tight text-[foreground]">Verification Queue</h2>}
         >
             <Head title="Verification Queue" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="card">
-                        <div className="divide-y divide-[var(--border-color)]">
+                        <div className="divide-y divide-[border]">
                             {pendingManagers.data.length > 0 ? (
                                 pendingManagers.data.map((pm) => (
                                     <div key={pm.id} className="flex items-center justify-between px-6 py-4 hover:bg-[var(--layer-02)] transition-colors">
                                         <div className="flex items-center space-x-4">
-                                            <div className="h-12 w-12 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center border-2 border-amber-400">
-                                                <span className="text-lg font-bold text-amber-600 dark:text-amber-400">
+                                            <div className="h-12 w-12 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center border-2 border-primary/80">
+                                                <span className="text-lg font-bold text-primary dark:text-primary/80">
                                                     {pm.business_name?.[0] || pm.user?.name?.[0] || 'P'}
                                                 </span>
                                             </div>
                                             <div>
-                                                <h3 className="font-medium text-[var(--text-primary)]">
+                                                <h3 className="font-medium text-[foreground]">
                                                     {pm.business_name || pm.user?.name}
                                                 </h3>
-                                                <p className="text-sm text-[var(--text-secondary)]">{pm.user?.email}</p>
+                                                <p className="text-sm text-[muted-foreground]">{pm.user?.email}</p>
                                                 <p className="text-sm text-[var(--text-muted)]">
                                                     {pm.city}, {pm.province}
                                                 </p>
@@ -74,8 +74,8 @@ export default function VerificationQueue({ pendingManagers }) {
                                         href={link.url || '#'}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                                             link.active
-                                                ? 'bg-amber-500 text-black'
-                                                : 'bg-[var(--layer-01)] text-[var(--text-secondary)] hover:bg-[var(--layer-02)] border border-[var(--border-color)]'
+                                                ? 'bg-primary text-black'
+                                                : 'bg-[var(--layer-01)] text-[muted-foreground] hover:bg-[var(--layer-02)] border border-[border]'
                                         } ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
                                         dangerouslySetInnerHTML={{ __html: link.label }}
                                     />

@@ -48,27 +48,27 @@ function Toast({ id, message, type = 'info', sender, onClose }) {
     const colors = {
         success: 'bg-green-500',
         info: 'bg-blue-500',
-        message: 'bg-amber-500',
+        message: 'bg-primary',
     };
 
     return (
-        <div className="flex items-start gap-3 w-80 p-4 rounded-lg bg-[var(--layer-01)] border border-[var(--border-color)] shadow-xl animate-slide-in">
+        <div className="flex items-start gap-3 w-80 p-4 rounded-lg bg-[var(--layer-01)] border border-[border] shadow-xl animate-slide-in">
             <div className={`shrink-0 w-8 h-8 rounded-full ${colors[type]} flex items-center justify-center text-white`}>
                 {icons[type]}
             </div>
             <div className="flex-1 min-w-0">
                 {sender && (
-                    <p className="text-sm font-semibold text-[var(--text-primary)]">
+                    <p className="text-sm font-semibold text-[foreground]">
                         New message from {sender}
                     </p>
                 )}
-                <p className="text-sm text-[var(--text-secondary)] truncate">
+                <p className="text-sm text-[muted-foreground] truncate">
                     {message}
                 </p>
             </div>
             <button
                 onClick={() => onClose(id)}
-                className="shrink-0 p-1 rounded text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--layer-02)] transition-colors"
+                className="shrink-0 p-1 rounded text-[var(--text-muted)] hover:text-[foreground] hover:bg-[var(--layer-02)] transition-colors"
             >
                 <CloseIcon />
             </button>

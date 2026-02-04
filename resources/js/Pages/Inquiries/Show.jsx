@@ -111,7 +111,7 @@ export default function InquiryShow({ inquiry: initialInquiry }) {
         <AuthenticatedLayout
             header={
                 <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-semibold leading-tight text-[var(--text-primary)]">
+                    <h2 className="text-xl font-semibold leading-tight text-[foreground]">
                         {initialInquiry.subject}
                     </h2>
                     <div className="flex items-center gap-2">
@@ -129,11 +129,11 @@ export default function InquiryShow({ inquiry: initialInquiry }) {
                 <div className="mx-auto max-w-4xl sm:px-6 lg:px-8">
                     {/* Inquiry Details */}
                     <div className="mb-6 card">
-                        <div className="border-b border-[var(--border-color)] bg-[var(--layer-02)] px-6 py-4">
+                        <div className="border-b border-[border] bg-[var(--layer-02)] px-6 py-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <p className="text-sm text-[var(--text-secondary)]">
-                                        {isOwner ? 'To:' : 'From:'} <span className="font-medium text-[var(--text-primary)]">{otherParty}</span>
+                                    <p className="text-sm text-[muted-foreground]">
+                                        {isOwner ? 'To:' : 'From:'} <span className="font-medium text-[foreground]">{otherParty}</span>
                                     </p>
                                     {initialInquiry.property_type && (
                                         <p className="text-sm text-[var(--text-muted)]">
@@ -144,7 +144,7 @@ export default function InquiryShow({ inquiry: initialInquiry }) {
                                 <span className={`badge ${
                                     initialInquiry.status === 'pending' ? 'badge-warning' :
                                     initialInquiry.status === 'replied' ? 'badge-success' :
-                                    initialInquiry.status === 'closed' ? 'bg-[var(--layer-3)] text-[var(--text-secondary)]' :
+                                    initialInquiry.status === 'closed' ? 'bg-[border] text-[muted-foreground]' :
                                     'badge-info'
                                 }`}>
                                     {initialInquiry.status}
@@ -167,7 +167,7 @@ export default function InquiryShow({ inquiry: initialInquiry }) {
                                             {/* Avatar */}
                                             <div className={`shrink-0 h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium ${
                                                 isMe
-                                                    ? 'bg-amber-500 text-black'
+                                                    ? 'bg-primary text-black'
                                                     : 'bg-blue-500 text-white'
                                             }`}>
                                                 {message.sender?.name?.[0] || '?'}
@@ -205,7 +205,7 @@ export default function InquiryShow({ inquiry: initialInquiry }) {
                                             
                                             {/* New badge for unread */}
                                             {!isMe && !message.is_read && (
-                                                <span className="shrink-0 w-2 h-2 rounded-full bg-amber-500" title="New message" />
+                                                <span className="shrink-0 w-2 h-2 rounded-full bg-primary" title="New message" />
                                             )}
                                         </div>
                                     </div>
@@ -216,9 +216,9 @@ export default function InquiryShow({ inquiry: initialInquiry }) {
 
                         {/* Reply Form */}
                         {initialInquiry.status !== 'closed' && (
-                            <div className="border-t border-[var(--border-color)] p-6">
+                            <div className="border-t border-[border] p-6">
                                 <form onSubmit={handleReply}>
-                                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">Reply</label>
+                                    <label className="block text-sm font-medium text-[muted-foreground] mb-2">Reply</label>
                                     <textarea
                                         value={data.content}
                                         onChange={(e) => setData('content', e.target.value)}
@@ -231,7 +231,7 @@ export default function InquiryShow({ inquiry: initialInquiry }) {
                                         <button
                                             type="button"
                                             onClick={() => setIsPolling(!isPolling)}
-                                            className="text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+                                            className="text-xs text-[var(--text-muted)] hover:text-[muted-foreground]"
                                         >
                                             {isPolling ? 'Pause live updates' : 'Resume live updates'}
                                         </button>

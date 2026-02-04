@@ -9,11 +9,11 @@ export default function ResponsiveNavLink({
     return (
         <Link
             {...props}
-            className={`flex w-full items-start border-l-4 py-2 pe-4 ps-3 ${
+            className={`flex w-full items-center gap-3 border-l-4 py-3 pe-4 ps-4 ${
                 active
-                    ? 'border-amber-500 bg-amber-500/10 text-amber-500'
-                    : 'border-transparent text-[var(--text-secondary)] hover:border-[var(--layer-3)] hover:bg-[var(--layer-2)] hover:text-[var(--text-primary)]'
-            } text-base font-medium transition duration-150 ease-in-out focus:outline-none ${className}`}
+                    ? 'border-primary bg-primary/10 text-primary font-semibold'
+                    : 'border-transparent text-muted-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-foreground hover:pl-5'
+            } text-base font-medium transition-all duration-300 ease-out focus:outline-none ${className}`}
         >
             {children}
         </Link>

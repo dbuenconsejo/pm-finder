@@ -15,7 +15,7 @@ export default function UserEdit({ user }) {
 
     return (
         <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-[var(--text-primary)]">Edit User</h2>}
+            header={<h2 className="text-xl font-semibold leading-tight text-[foreground]">Edit User</h2>}
         >
             <Head title="Edit User" />
 
@@ -25,7 +25,7 @@ export default function UserEdit({ user }) {
                         <form onSubmit={handleSubmit} className="p-6 space-y-6">
                             {/* Name */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Name</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">Name</label>
                                 <input
                                     type="text"
                                     value={data.name}
@@ -38,7 +38,7 @@ export default function UserEdit({ user }) {
 
                             {/* Email */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Email</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">Email</label>
                                 <input
                                     type="email"
                                     value={data.email}
@@ -51,7 +51,7 @@ export default function UserEdit({ user }) {
 
                             {/* Role */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Role</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">Role</label>
                                 <select
                                     value={data.role}
                                     onChange={(e) => setData('role', e.target.value)}

@@ -21,7 +21,11 @@ export default forwardRef(function TextInput(
             {...props}
             type={type}
             className={
-                'rounded-lg border-[var(--layer-3)] bg-[var(--layer-1)] text-[var(--text-primary)] shadow-sm focus:border-amber-500 focus:ring-amber-500 placeholder:text-[var(--text-tertiary)] ' +
+                'w-full rounded-xl border border-border bg-background text-foreground px-4 py-2.5 shadow-sm transition-all duration-200 ' +
+                'placeholder:text-muted-foreground ' +
+                'hover:border-primary/50 hover:shadow-md ' +
+                'focus:border-primary focus:ring-2 focus:ring-primary/20 focus:shadow-lg focus:outline-none ' +
+                'disabled:opacity-50 disabled:cursor-not-allowed ' +
                 className
             }
             ref={localRef}

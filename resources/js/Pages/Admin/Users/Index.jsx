@@ -19,7 +19,7 @@ export default function UsersIndex({ users, filters }) {
 
     return (
         <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-[var(--text-primary)]">User Management</h2>}
+            header={<h2 className="text-xl font-semibold leading-tight text-[foreground]">User Management</h2>}
         >
             <Head title="User Management" />
 
@@ -57,7 +57,7 @@ export default function UsersIndex({ users, filters }) {
 
                     {/* Users Table */}
                     <div className="card overflow-hidden">
-                        <table className="min-w-full divide-y divide-[var(--border-color)]">
+                        <table className="min-w-full divide-y divide-[border]">
                             <thead className="bg-[var(--layer-02)]">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[var(--text-muted)]">
@@ -74,12 +74,12 @@ export default function UsersIndex({ users, filters }) {
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-[var(--border-color)]">
+                            <tbody className="divide-y divide-[border]">
                                 {users.data.map((user) => (
                                     <tr key={user.id} className="hover:bg-[var(--layer-02)] transition-colors">
                                         <td className="whitespace-nowrap px-6 py-4">
                                             <div>
-                                                <div className="font-medium text-[var(--text-primary)]">{user.name}</div>
+                                                <div className="font-medium text-[foreground]">{user.name}</div>
                                                 <div className="text-sm text-[var(--text-muted)]">{user.email}</div>
                                             </div>
                                         </td>
@@ -87,7 +87,7 @@ export default function UsersIndex({ users, filters }) {
                                             <span className={`badge ${
                                                 user.role === 'admin' ? 'bg-purple-500/20 text-purple-400' :
                                                 user.role === 'manager' ? 'badge-info' :
-                                                'bg-[var(--layer-3)] text-[var(--text-secondary)]'
+                                                'bg-[border] text-[muted-foreground]'
                                             }`}>
                                                 {user.role}
                                             </span>
@@ -98,7 +98,7 @@ export default function UsersIndex({ users, filters }) {
                                         <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                                             <Link
                                                 href={route('admin.users.edit', user.id)}
-                                                className="text-amber-500 hover:text-amber-400 mr-4"
+                                                className="text-primary hover:text-primary/80 mr-4"
                                             >
                                                 Edit
                                             </Link>
@@ -125,8 +125,8 @@ export default function UsersIndex({ users, filters }) {
                                         href={link.url || '#'}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                                             link.active
-                                                ? 'bg-amber-500 text-black'
-                                                : 'bg-[var(--layer-01)] text-[var(--text-secondary)] hover:bg-[var(--layer-02)] border border-[var(--border-color)]'
+                                                ? 'bg-primary text-black'
+                                                : 'bg-[var(--layer-01)] text-[muted-foreground] hover:bg-[var(--layer-02)] border border-[border]'
                                         } ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
                                         dangerouslySetInnerHTML={{ __html: link.label }}
                                     />

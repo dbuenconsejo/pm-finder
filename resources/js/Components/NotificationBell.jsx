@@ -79,7 +79,7 @@ export default function NotificationBell() {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative p-2 rounded-lg text-[var(--text-secondary)] hover:text-amber-500 hover:bg-[var(--layer-02)] transition-colors"
+                className="relative p-2 rounded-lg text-[muted-foreground] hover:text-primary hover:bg-[var(--layer-02)] transition-colors"
             >
                 <BellIcon />
                 {unreadCount > 0 && (
@@ -90,14 +90,14 @@ export default function NotificationBell() {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-80 rounded-lg bg-[var(--layer-01)] border border-[var(--border-color)] shadow-xl z-50">
-                    <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-color)]">
-                        <h3 className="font-semibold text-[var(--text-primary)]">Notifications</h3>
+                <div className="absolute right-0 mt-2 w-80 rounded-lg bg-[var(--layer-01)] border border-[border] shadow-xl z-50">
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-[border]">
+                        <h3 className="font-semibold text-[foreground]">Notifications</h3>
                         {unreadCount > 0 && (
                             <button
                                 onClick={handleMarkAllRead}
                                 disabled={loading}
-                                className="text-xs text-amber-500 hover:text-amber-400 disabled:opacity-50"
+                                className="text-xs text-primary hover:text-primary/80 disabled:opacity-50"
                             >
                                 Mark all read
                             </button>
@@ -110,26 +110,26 @@ export default function NotificationBell() {
                                 <Link
                                     key={notification.id}
                                     href={route('inquiries.show', notification.inquiry_id)}
-                                    className="block px-4 py-3 hover:bg-[var(--layer-02)] transition-colors border-b border-[var(--border-color)] last:border-0"
+                                    className="block px-4 py-3 hover:bg-[var(--layer-02)] transition-colors border-b border-[border] last:border-0"
                                     onClick={() => setIsOpen(false)}
                                 >
                                     <div className="flex items-start gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
-                                            <span className="text-sm font-bold text-amber-500">
+                                        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                                            <span className="text-sm font-bold text-primary">
                                                 {notification.sender_name[0]}
                                             </span>
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-medium text-[var(--text-primary)] truncate">
+                                            <p className="text-sm font-medium text-[foreground] truncate">
                                                 {notification.sender_name}
                                             </p>
                                             <p className="text-xs text-[var(--text-muted)] truncate">
                                                 Re: {notification.subject}
                                             </p>
-                                            <p className="text-xs text-[var(--text-tertiary)] mt-1">
+                                            <p className="text-xs text-[muted-foreground] mt-1">
                                                 {notification.preview}
                                             </p>
-                                            <p className="text-xs text-amber-500 mt-1">
+                                            <p className="text-xs text-primary mt-1">
                                                 {notification.created_at}
                                             </p>
                                         </div>
@@ -146,10 +146,10 @@ export default function NotificationBell() {
                         )}
                     </div>
 
-                    <div className="px-4 py-3 border-t border-[var(--border-color)]">
+                    <div className="px-4 py-3 border-t border-[border]">
                         <Link
                             href={route('inquiries.index')}
-                            className="block text-center text-sm text-amber-500 hover:text-amber-400"
+                            className="block text-center text-sm text-primary hover:text-primary/80"
                             onClick={() => setIsOpen(false)}
                         >
                             View all inquiries

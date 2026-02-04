@@ -66,7 +66,7 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div className="mt-4 block">
-                    <label className="flex items-center">
+                    <label className="flex items-center cursor-pointer group">
                         <Checkbox
                             name="remember"
                             checked={data.remember}
@@ -74,17 +74,17 @@ export default function Login({ status, canResetPassword }) {
                                 setData('remember', e.target.checked)
                             }
                         />
-                        <span className="ms-2 text-sm text-gray-600">
+                        <span className="ms-3 text-sm text-muted-foreground group-hover:text-foreground transition-colors">
                             Remember me
                         </span>
                     </label>
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
+                <div className="mt-6 flex items-center justify-between">
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="text-sm text-muted-foreground hover:text-primary transition-colors"
                         >
                             Forgot your password?
                         </Link>

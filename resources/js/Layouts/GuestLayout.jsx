@@ -1,41 +1,46 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Link } from '@inertiajs/react';
 import { useTheme } from '@/Contexts/ThemeContext';
-
-const SunIcon = () => (
-    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-    </svg>
-);
-
-const MoonIcon = () => (
-    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-    </svg>
-);
+import { Sun, Moon } from 'lucide-react';
 
 export default function GuestLayout({ children }) {
     const { darkMode, toggleDarkMode } = useTheme();
 
     return (
-        <div className="flex min-h-screen flex-col items-center bg-[var(--background)] hex-pattern pt-6 sm:justify-center sm:pt-0">
+        <div className="flex min-h-screen flex-col items-center bg-background pt-6 sm:justify-center sm:pt-0 relative overflow-hidden">
+            {/* Background decoration */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/20 to-purple-600/20 rounded-full blur-3xl" />
+                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-primary/10 to-purple-600/10 rounded-full blur-3xl" />
+            </div>
+
             {/* Theme toggle in corner */}
             <button
                 onClick={toggleDarkMode}
-                className="fixed top-4 right-4 p-2 rounded-lg text-[var(--text-secondary)] hover:text-amber-500 hover:bg-[var(--layer-2)] transition-colors"
+                className="fixed top-4 right-4 p-3 rounded-xl bg-card/80 backdrop-blur-sm border border-border/50 text-muted-foreground hover:text-primary hover:border-primary/30 hover:shadow-lg transition-all duration-300 z-10"
             >
-                {darkMode ? <SunIcon /> : <MoonIcon />}
+                {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
 
-            <div>
-                <Link href="/">
+            <div className="relative">
+                <Link href="/" className="block hover:scale-105 transition-transform duration-300">
                     <ApplicationLogo className="h-12" />
                 </Link>
             </div>
 
-            <div className="mt-6 w-full overflow-hidden bg-[var(--layer-1)] px-6 py-4 shadow-lg border border-[var(--layer-3)] sm:max-w-md sm:rounded-lg">
+            <div className="relative mt-8 w-full overflow-hidden bg-card/80 backdrop-blur-xl px-8 py-8 shadow-2xl shadow-black/10 dark:shadow-black/30 border border-border/50 sm:max-w-md sm:rounded-2xl">
+                {/* Gradient accent on top */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-purple-500 to-primary" />
                 {children}
             </div>
+
+            {/* Footer link */}
+            <p className="relative mt-6 text-sm text-muted-foreground">
+                Don't have an account?{' '}
+                <Link href={route('register')} className="text-primary hover:text-primary/80 font-medium transition-colors">
+                    Sign up
+                </Link>
+            </p>
         </div>
     );
 }

@@ -13,7 +13,7 @@ const Dropdown = ({ children }) => {
 
     return (
         <DropDownContext.Provider value={{ open, setOpen, toggleOpen }}>
-            <div className="relative">{children}</div>
+            <div className="relative z-[200]">{children}</div>
         </DropDownContext.Provider>
     );
 };
@@ -23,7 +23,7 @@ const Trigger = ({ children }) => {
 
     return (
         <>
-            <div onClick={toggleOpen}>{children}</div>
+            <div onClick={toggleOpen} className="cursor-pointer">{children}</div>
 
             {open && (
                 <div
@@ -38,7 +38,7 @@ const Trigger = ({ children }) => {
 const Content = ({
     align = 'right',
     width = '48',
-    contentClasses = 'py-1 bg-[var(--layer-1)]',
+    contentClasses = 'py-2',
     children,
 }) => {
     const { open, setOpen } = useContext(DropDownContext);
@@ -54,29 +54,34 @@ const Content = ({
     let widthClasses = '';
 
     if (width === '48') {
-        widthClasses = 'w-48';
+        widthClasses = 'w-56';
     }
 
     return (
         <>
             <Transition
                 show={open}
-                enter="transition ease-out duration-200"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
+                enter="transition-all ease-out duration-200"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transition-all ease-in duration-150"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
             >
                 <div
-                    className={`absolute z-50 mt-2 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`}
+                    className={`absolute z-[100] mt-3 rounded-2xl shadow-2xl ${alignmentClasses} ${widthClasses}`}
                     onClick={() => setOpen(false)}
+                    style={{ 
+                        backgroundColor: 'hsl(var(--card))',
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+                    }}
                 >
                     <div
                         className={
-                            `rounded-md ring-1 ring-[var(--layer-3)] ` +
+                            `rounded-2xl border border-border overflow-hidden ` +
                             contentClasses
                         }
+                        style={{ backgroundColor: 'hsl(var(--card))' }}
                     >
                         {children}
                     </div>
@@ -91,7 +96,10 @@ const DropdownLink = ({ className = '', children, ...props }) => {
         <Link
             {...props}
             className={
-                'block w-full px-4 py-2 text-start text-sm leading-5 text-[var(--text-secondary)] transition duration-150 ease-in-out hover:bg-[var(--layer-2)] hover:text-amber-500 focus:bg-[var(--layer-2)] focus:outline-none ' +
+                'group flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-foreground ' +
+                'transition-all duration-200 ease-out ' +
+                'hover:bg-primary/10 hover:text-primary ' +
+                'focus:bg-primary/10 focus:text-primary focus:outline-none ' +
                 className
             }
         >

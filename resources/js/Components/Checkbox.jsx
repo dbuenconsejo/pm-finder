@@ -4,7 +4,12 @@ export default function Checkbox({ className = '', ...props }) {
             {...props}
             type="checkbox"
             className={
-                'rounded border-[var(--layer-3)] bg-[var(--layer-1)] text-amber-500 shadow-sm focus:ring-amber-500 ' +
+                'h-5 w-5 rounded-md border-2 border-border bg-background text-primary ' +
+                'shadow-sm cursor-pointer ' +
+                'transition-all duration-200 ' +
+                'hover:border-primary/50 hover:shadow-md ' +
+                'focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 focus:ring-offset-background ' +
+                'checked:bg-primary checked:border-primary ' +
                 className
             }
         />

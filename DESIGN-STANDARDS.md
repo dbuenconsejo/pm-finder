@@ -1,7 +1,7 @@
 # PM Finder Design Standards
-**Design Specifications v1.0**
+**Design Specifications v2.0**
 
-Built on IBM Carbon Design System principles with custom brand integration
+Built on **shadcn/ui** component library with custom purple brand integration
 
 ---
 
@@ -40,20 +40,23 @@ PM Finder is a web-based platform designed to help property owners find trusted 
 
 ## Design Foundation
 
-### Core Framework: IBM Carbon Design System
+### Core Framework: shadcn/ui + Tailwind CSS
 
-**Why Carbon-inspired:**
-- Enterprise-grade design patterns
-- High information density support
-- Comprehensive component library
+**Why shadcn/ui:**
+- Modern, accessible components built on Radix UI
+- Copy-paste components (no external dependency)
+- Tailwind CSS native styling
+- HSL-based theming system
+- Easy customization
 - Battle-tested accessibility (WCAG AA+)
 - Professional aesthetic
 
 ### Technology Stack
 
 - **CSS Framework:** Tailwind CSS
-- **Fonts:** IBM Plex Sans, IBM Plex Mono
-- **Icons:** Heroicons, Custom SVG
+- **Component Library:** shadcn/ui (Radix UI primitives)
+- **Fonts:** Inter
+- **Icons:** Lucide React
 - **Build Tool:** Vite
 
 ---
@@ -62,11 +65,15 @@ PM Finder is a web-based platform designed to help property owners find trusted 
 
 ### Brand Colors
 
-**Primary - Golden Amber:**
+**Primary - Modern Purple:**
 ```css
---amber-gold: #F5A623;        /* Primary CTA, brand identity */
---amber-gold-light: #FFB84D;  /* Hover states */
---amber-gold-dark: #E59400;   /* Active/pressed states */
+/* Light mode */
+--primary: 262 83% 58%;           /* #8B5CF6 - Vibrant purple */
+--primary-foreground: 0 0% 100%;  /* White text on primary */
+
+/* Dark mode */
+--primary: 263 70% 50%;           /* Slightly adjusted for dark */
+--primary-foreground: 0 0% 100%;
 ```
 
 **Usage:**
@@ -74,7 +81,6 @@ PM Finder is a web-based platform designed to help property owners find trusted 
 - Active navigation states
 - Focus indicators
 - Brand elements and accents
-- Success confirmations
 
 ### Light Mode Palette
 
@@ -153,6 +159,75 @@ PM Finder is a web-based platform designed to help property owners find trusted 
 ---
 
 ## Components
+
+### Stat Cards
+
+The stat-card component is used for displaying key metrics and statistics on dashboards.
+
+```css
+.stat-card {
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    border-radius: 1rem;
+    border: 1px solid hsl(var(--border));
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+    border-color: hsl(var(--primary) / 0.3);
+    box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--muted-foreground));
+}
+
+.stat-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: hsl(var(--foreground));
+    margin-top: 0.5rem;
+    line-height: 1;
+}
+
+.stat-change {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    color: hsl(var(--muted-foreground));
+}
+
+.stat-change.positive {
+    color: hsl(var(--success));
+}
+
+.stat-change.negative {
+    color: hsl(var(--error));
+}
+```
+
+**Usage Example (JSX):**
+```jsx
+<div className="stat-card">
+    <div className="flex items-center justify-between">
+        <span className="stat-label">New Inquiries</span>
+        <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+            <MessageSquare className="w-6 h-6" />
+        </div>
+    </div>
+    <div className="stat-value">0</div>
+    <div className="stat-change">Awaiting response</div>
+</div>
+```
+
+**Icon Color Options:**
+- Blue: `bg-blue-500/10 text-blue-500`
+- Cyan: `bg-cyan-500/10 text-cyan-500`
+- Purple: `bg-purple-500/10 text-purple-500`
+- Primary: `bg-primary/10 text-primary`
+- Emerald: `bg-emerald-500/10 text-emerald-500`
 
 ### Buttons
 

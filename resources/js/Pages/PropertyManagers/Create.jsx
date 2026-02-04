@@ -1,5 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
+import { Building2, Phone, MapPin, Briefcase, User } from 'lucide-react';
 
 export default function PropertyManagerCreate() {
     const { data, setData, post, processing, errors } = useForm({
@@ -51,62 +52,74 @@ export default function PropertyManagerCreate() {
 
     return (
         <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Create Property Manager Profile</h2>}
+            header={
+                <div>
+                    <h2 className="text-2xl font-bold text-foreground">Create Property Manager Profile</h2>
+                    <p className="text-sm text-muted-foreground mt-1">Set up your professional profile to start receiving inquiries</p>
+                </div>
+            }
         >
             <Head title="Create PM Profile" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-3xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden rounded-lg bg-white shadow">
-                        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <div className="py-8">
+                <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+                    <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm">
+                        {/* Gradient accent */}
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-purple-500 to-primary" />
+                        
+                        <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-8">
                             {/* Business Name */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
+                            <div className="group">
+                                <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                                    <User className="w-4 h-4 text-primary" />
                                     Business Name
                                 </label>
                                 <input
                                     type="text"
                                     value={data.business_name}
                                     onChange={(e) => setData('business_name', e.target.value)}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
+                                    className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 shadow-sm transition-all duration-200 placeholder:text-muted-foreground hover:border-primary/50 hover:shadow-md focus:border-primary focus:ring-2 focus:ring-primary/20 focus:shadow-lg focus:outline-none"
                                     placeholder="Your business or professional name"
                                 />
-                                {errors.business_name && <p className="mt-1 text-sm text-red-600">{errors.business_name}</p>}
+                                {errors.business_name && <p className="mt-2 text-sm text-red-500">{errors.business_name}</p>}
                             </div>
 
                             {/* Bio */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">
+                                <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                                    <Briefcase className="w-4 h-4 text-primary" />
                                     About / Bio
                                 </label>
                                 <textarea
                                     value={data.bio}
                                     onChange={(e) => setData('bio', e.target.value)}
                                     rows={4}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
+                                    className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 shadow-sm transition-all duration-200 placeholder:text-muted-foreground hover:border-primary/50 hover:shadow-md focus:border-primary focus:ring-2 focus:ring-primary/20 focus:shadow-lg focus:outline-none resize-none"
                                     placeholder="Tell potential clients about yourself and your experience..."
                                 />
-                                {errors.bio && <p className="mt-1 text-sm text-red-600">{errors.bio}</p>}
+                                {errors.bio && <p className="mt-2 text-sm text-red-500">{errors.bio}</p>}
                             </div>
 
                             {/* Phone */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">
+                                <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                                    <Phone className="w-4 h-4 text-primary" />
                                     Contact Phone
                                 </label>
                                 <input
                                     type="text"
                                     value={data.phone}
                                     onChange={(e) => setData('phone', e.target.value)}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
+                                    className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-3 shadow-sm transition-all duration-200 placeholder:text-muted-foreground hover:border-primary/50 hover:shadow-md focus:border-primary focus:ring-2 focus:ring-primary/20 focus:shadow-lg focus:outline-none"
                                     placeholder="+63 XXX XXX XXXX"
                                 />
-                                {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
+                                {errors.phone && <p className="mt-2 text-sm text-red-500">{errors.phone}</p>}
                             </div>
 
                             {/* Service Types */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                    <Building2 className="w-4 h-4 text-primary" />
                                     Property Types You Manage
                                 </label>
                                 <div className="flex flex-wrap gap-2">
@@ -115,89 +128,103 @@ export default function PropertyManagerCreate() {
                                             key={type}
                                             type="button"
                                             onClick={() => toggleServiceType(type)}
-                                            className={`rounded-full px-4 py-2 text-sm font-medium ${
+                                            className={`rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-300 ${
                                                 data.service_types.includes(type)
-                                                    ? 'bg-amber-600 text-white'
-                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                    ? 'bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/25 scale-105'
+                                                    : 'bg-muted border border-border text-foreground hover:border-primary/50 hover:bg-primary/5 hover:text-primary'
                                             }`}
                                         >
                                             {type}
                                         </button>
                                     ))}
                                 </div>
-                                {errors.service_types && <p className="mt-1 text-sm text-red-600">{errors.service_types}</p>}
+                                {errors.service_types && <p className="mt-2 text-sm text-red-500">{errors.service_types}</p>}
                             </div>
 
                             {/* Services */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                    <Briefcase className="w-4 h-4 text-primary" />
                                     Services You Offer
                                 </label>
-                                <div className="grid grid-cols-2 gap-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {availableServices.map((service) => (
-                                        <label key={service} className="flex items-center">
+                                        <label 
+                                            key={service} 
+                                            className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all duration-300 ${
+                                                data.services.includes(service)
+                                                    ? 'border-primary/50 bg-primary/5'
+                                                    : 'border-border hover:border-primary/30 hover:bg-primary/5'
+                                            }`}
+                                        >
                                             <input
                                                 type="checkbox"
                                                 checked={data.services.includes(service)}
                                                 onChange={() => toggleService(service)}
-                                                className="h-4 w-4 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                                                className="h-5 w-5 rounded-md border-2 border-border bg-background text-primary cursor-pointer transition-all duration-200 hover:border-primary/50 focus:ring-2 focus:ring-primary/20 checked:bg-primary checked:border-primary"
                                             />
-                                            <span className="ml-2 text-sm text-gray-700">{service}</span>
+                                            <span className="text-sm text-foreground">{service}</span>
                                         </label>
                                     ))}
                                 </div>
-                                {errors.services && <p className="mt-1 text-sm text-red-600">{errors.services}</p>}
+                                {errors.services && <p className="mt-2 text-sm text-red-500">{errors.services}</p>}
                             </div>
 
                             {/* Location */}
-                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">Province</label>
-                                    <input
-                                        type="text"
-                                        value={data.province}
-                                        onChange={(e) => setData('province', e.target.value)}
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
-                                        placeholder="e.g., Cebu"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">City</label>
-                                    <input
-                                        type="text"
-                                        value={data.city}
-                                        onChange={(e) => setData('city', e.target.value)}
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
-                                        placeholder="e.g., Cebu City"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">Barangay</label>
-                                    <input
-                                        type="text"
-                                        value={data.barangay}
-                                        onChange={(e) => setData('barangay', e.target.value)}
-                                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
-                                        placeholder="e.g., Lahug"
-                                    />
+                            <div>
+                                <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                    <MapPin className="w-4 h-4 text-primary" />
+                                    Location
+                                </label>
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                    <div>
+                                        <label className="block text-xs font-medium text-muted-foreground mb-1.5">Province</label>
+                                        <input
+                                            type="text"
+                                            value={data.province}
+                                            onChange={(e) => setData('province', e.target.value)}
+                                            className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-2.5 shadow-sm transition-all duration-200 placeholder:text-muted-foreground hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
+                                            placeholder="e.g., Cebu"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-medium text-muted-foreground mb-1.5">City</label>
+                                        <input
+                                            type="text"
+                                            value={data.city}
+                                            onChange={(e) => setData('city', e.target.value)}
+                                            className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-2.5 shadow-sm transition-all duration-200 placeholder:text-muted-foreground hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
+                                            placeholder="e.g., Cebu City"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-medium text-muted-foreground mb-1.5">Barangay</label>
+                                        <input
+                                            type="text"
+                                            value={data.barangay}
+                                            onChange={(e) => setData('barangay', e.target.value)}
+                                            className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-2.5 shadow-sm transition-all duration-200 placeholder:text-muted-foreground hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
+                                            placeholder="e.g., Lahug"
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
                             {/* Address */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Full Address</label>
+                                <label className="block text-xs font-medium text-muted-foreground mb-1.5">Full Address (Optional)</label>
                                 <input
                                     type="text"
                                     value={data.address}
                                     onChange={(e) => setData('address', e.target.value)}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
-                                    placeholder="Street address (optional)"
+                                    className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-2.5 shadow-sm transition-all duration-200 placeholder:text-muted-foreground hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
+                                    placeholder="Street address"
                                 />
                             </div>
 
                             {/* Service Radius */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">
+                                <label className="block text-xs font-medium text-muted-foreground mb-1.5">
                                     Service Radius (km)
                                 </label>
                                 <input
@@ -206,16 +233,16 @@ export default function PropertyManagerCreate() {
                                     onChange={(e) => setData('service_radius_km', e.target.value)}
                                     min="1"
                                     max="100"
-                                    className="mt-1 block w-32 rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
+                                    className="w-32 rounded-xl border border-border bg-background text-foreground px-4 py-2.5 shadow-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
                                 />
                             </div>
 
                             {/* Submit */}
-                            <div className="flex justify-end">
+                            <div className="flex justify-end pt-4 border-t border-border/50">
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="rounded-md bg-amber-600 px-6 py-2 text-sm font-semibold text-white hover:bg-amber-500 disabled:opacity-50"
+                                    className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-primary to-purple-600 shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-xl hover:shadow-primary/40 hover:ring-2 hover:ring-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {processing ? 'Creating...' : 'Create Profile'}
                                 </button>

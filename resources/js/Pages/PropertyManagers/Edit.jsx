@@ -52,7 +52,7 @@ export default function PropertyManagerEdit({ propertyManager }) {
 
     return (
         <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-[var(--text-primary)]">Edit Profile</h2>}
+            header={<h2 className="text-xl font-semibold leading-tight text-[foreground]">Edit Profile</h2>}
         >
             <Head title="Edit PM Profile" />
 
@@ -61,16 +61,16 @@ export default function PropertyManagerEdit({ propertyManager }) {
                     <div className="card">
                         <form onSubmit={handleSubmit} className="p-6 space-y-6">
                             {/* Availability Toggle */}
-                            <div className="flex items-center justify-between p-4 bg-[var(--layer-02)] rounded-lg border border-[var(--border-color)]">
+                            <div className="flex items-center justify-between p-4 bg-[var(--layer-02)] rounded-lg border border-[border]">
                                 <div>
-                                    <h3 className="font-medium text-[var(--text-primary)]">Availability</h3>
+                                    <h3 className="font-medium text-[foreground]">Availability</h3>
                                     <p className="text-sm text-[var(--text-muted)]">Toggle whether you appear in search results</p>
                                 </div>
                                 <button
                                     type="button"
                                     onClick={() => setData('is_available', !data.is_available)}
                                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                                        data.is_available ? 'bg-amber-500' : 'bg-[var(--layer-3)]'
+                                        data.is_available ? 'bg-primary' : 'bg-[border]'
                                     }`}
                                 >
                                     <span
@@ -83,7 +83,7 @@ export default function PropertyManagerEdit({ propertyManager }) {
 
                             {/* Business Name */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Business Name</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">Business Name</label>
                                 <input
                                     type="text"
                                     value={data.business_name}
@@ -95,7 +95,7 @@ export default function PropertyManagerEdit({ propertyManager }) {
 
                             {/* Bio */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">About / Bio</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">About / Bio</label>
                                 <textarea
                                     value={data.bio}
                                     onChange={(e) => setData('bio', e.target.value)}
@@ -107,7 +107,7 @@ export default function PropertyManagerEdit({ propertyManager }) {
 
                             {/* Phone */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Contact Phone</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">Contact Phone</label>
                                 <input
                                     type="text"
                                     value={data.phone}
@@ -119,7 +119,7 @@ export default function PropertyManagerEdit({ propertyManager }) {
 
                             {/* Service Types */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">Property Types</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-2">Property Types</label>
                                 <div className="flex flex-wrap gap-2">
                                     {availableServiceTypes.map((type) => (
                                         <button
@@ -128,8 +128,8 @@ export default function PropertyManagerEdit({ propertyManager }) {
                                             onClick={() => toggleServiceType(type)}
                                             className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                                                 data.service_types.includes(type)
-                                                    ? 'bg-amber-500 text-black'
-                                                    : 'bg-[var(--layer-02)] text-[var(--text-secondary)] hover:bg-[var(--layer-3)] border border-[var(--border-color)]'
+                                                    ? 'bg-primary text-black'
+                                                    : 'bg-[var(--layer-02)] text-[muted-foreground] hover:bg-[border] border border-[border]'
                                             }`}
                                         >
                                             {type}
@@ -140,7 +140,7 @@ export default function PropertyManagerEdit({ propertyManager }) {
 
                             {/* Services */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">Services</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-2">Services</label>
                                 <div className="grid grid-cols-2 gap-2">
                                     {availableServices.map((service) => (
                                         <label key={service} className="flex items-center cursor-pointer">
@@ -148,9 +148,9 @@ export default function PropertyManagerEdit({ propertyManager }) {
                                                 type="checkbox"
                                                 checked={data.services.includes(service)}
                                                 onChange={() => toggleService(service)}
-                                                className="h-4 w-4 rounded border-[var(--layer-3)] bg-[var(--layer-01)] text-amber-500 focus:ring-amber-500"
+                                                className="h-4 w-4 rounded border-[border] bg-[var(--layer-01)] text-primary focus:ring-primary"
                                             />
-                                            <span className="ml-2 text-sm text-[var(--text-secondary)]">{service}</span>
+                                            <span className="ml-2 text-sm text-[muted-foreground]">{service}</span>
                                         </label>
                                     ))}
                                 </div>
@@ -159,7 +159,7 @@ export default function PropertyManagerEdit({ propertyManager }) {
                             {/* Location */}
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                                 <div>
-                                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Province</label>
+                                    <label className="block text-sm font-medium text-[muted-foreground] mb-1">Province</label>
                                     <input
                                         type="text"
                                         value={data.province}
@@ -168,7 +168,7 @@ export default function PropertyManagerEdit({ propertyManager }) {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">City</label>
+                                    <label className="block text-sm font-medium text-[muted-foreground] mb-1">City</label>
                                     <input
                                         type="text"
                                         value={data.city}
@@ -177,7 +177,7 @@ export default function PropertyManagerEdit({ propertyManager }) {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Barangay</label>
+                                    <label className="block text-sm font-medium text-[muted-foreground] mb-1">Barangay</label>
                                     <input
                                         type="text"
                                         value={data.barangay}
@@ -189,7 +189,7 @@ export default function PropertyManagerEdit({ propertyManager }) {
 
                             {/* Address */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Full Address</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">Full Address</label>
                                 <input
                                     type="text"
                                     value={data.address}
@@ -200,7 +200,7 @@ export default function PropertyManagerEdit({ propertyManager }) {
 
                             {/* Service Radius */}
                             <div>
-                                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Service Radius (km)</label>
+                                <label className="block text-sm font-medium text-[muted-foreground] mb-1">Service Radius (km)</label>
                                 <input
                                     type="number"
                                     value={data.service_radius_km}

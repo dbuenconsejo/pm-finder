@@ -49,23 +49,25 @@ export default function ManagerDashboard({ propertyManager, stats, recentInquiri
     return (
         <AuthenticatedLayout
             header={
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h2 className="text-2xl font-semibold text-[var(--text-primary)]">
+                        <h2 className="text-xl sm:text-2xl font-semibold text-foreground">
                             {propertyManager.business_name || 'Property Manager Dashboard'}
                         </h2>
-                        <p className="text-sm text-[var(--text-tertiary)] mt-1">
+                        <p className="text-sm text-muted-foreground mt-1">
                             Manage your inquiries and track your performance
                         </p>
                     </div>
-                    <div className="flex gap-3">
-                        <Link href={route('property-managers.show', propertyManager.id)} className="btn-secondary">
+                    <div className="flex gap-2 sm:gap-3">
+                        <Link href={route('property-managers.show', propertyManager.id)} className="btn-secondary text-sm">
                             <ExternalLinkIcon />
-                            View Profile
+                            <span className="hidden sm:inline">View Profile</span>
+                            <span className="sm:hidden">View</span>
                         </Link>
-                        <Link href={route('property-managers.edit', propertyManager.id)} className="btn-primary">
+                        <Link href={route('property-managers.edit', propertyManager.id)} className="btn-primary text-sm">
                             <EditIcon />
-                            Edit Profile
+                            <span className="hidden sm:inline">Edit Profile</span>
+                            <span className="sm:hidden">Edit</span>
                         </Link>
                     </div>
                 </div>
@@ -86,7 +88,7 @@ export default function ManagerDashboard({ propertyManager, stats, recentInquiri
                             </div>
                             <div className="stat-value">{stats.newInquiries}</div>
                             <div className="stat-change">
-                                <span className="text-[var(--text-tertiary)]">Awaiting response</span>
+                                <span className="text-[muted-foreground]">Awaiting response</span>
                             </div>
                         </div>
 
@@ -99,7 +101,7 @@ export default function ManagerDashboard({ propertyManager, stats, recentInquiri
                             </div>
                             <div className="stat-value font-mono">{stats.profileViews}</div>
                             <div className="stat-change positive">
-                                <span className="text-[var(--text-tertiary)]">Total views</span>
+                                <span className="text-[muted-foreground]">Total views</span>
                             </div>
                         </div>
 
@@ -112,23 +114,23 @@ export default function ManagerDashboard({ propertyManager, stats, recentInquiri
                             </div>
                             <div className="stat-value">{stats.totalReviews}</div>
                             <div className="stat-change">
-                                <span className="text-[var(--text-tertiary)]">From clients</span>
+                                <span className="text-[muted-foreground]">From clients</span>
                             </div>
                         </div>
 
                         <div className="stat-card">
                             <div className="flex items-center justify-between">
                                 <span className="stat-label">Rating</span>
-                                <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500">
+                                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                                     <StarIcon />
                                 </div>
                             </div>
                             <div className="flex items-baseline gap-2">
                                 <span className="stat-value">{Number(stats.rating).toFixed(1) || '0.0'}</span>
-                                <span className="text-amber-500">★</span>
+                                <span className="text-primary">★</span>
                             </div>
                             <div className="stat-change">
-                                <span className="text-[var(--text-tertiary)]">Average rating</span>
+                                <span className="text-[muted-foreground]">Average rating</span>
                             </div>
                         </div>
                     </div>
@@ -137,18 +139,18 @@ export default function ManagerDashboard({ propertyManager, stats, recentInquiri
                         {/* New Inquiries */}
                         <div className="card">
                             <div className="card-header flex items-center justify-between">
-                                <h3 className="text-lg font-semibold text-[var(--text-primary)]">New Inquiries</h3>
-                                <Link href={route('inquiries.index')} className="text-sm text-amber-500 hover:text-amber-400 flex items-center gap-1">
+                                <h3 className="text-lg font-semibold text-[foreground]">New Inquiries</h3>
+                                <Link href={route('inquiries.index')} className="text-sm text-primary hover:text-primary/80 flex items-center gap-1">
                                     View all <ArrowRightIcon />
                                 </Link>
                             </div>
-                            <div className="divide-y divide-[var(--layer-3)]">
+                            <div className="divide-y divide-[border]">
                                 {recentInquiries.length > 0 ? (
                                     recentInquiries.map((inquiry) => (
                                         <Link
                                             key={inquiry.id}
                                             href={route('inquiries.show', inquiry.id)}
-                                            className="block px-6 py-4 hover:bg-[var(--layer-2)] transition-colors"
+                                            className="block px-6 py-4 hover:bg-[accent] transition-colors"
                                         >
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-3">
@@ -156,8 +158,8 @@ export default function ManagerDashboard({ propertyManager, stats, recentInquiri
                                                         {inquiry.user?.name?.[0] || 'U'}
                                                     </div>
                                                     <div>
-                                                        <p className="font-medium text-[var(--text-primary)]">{inquiry.subject}</p>
-                                                        <p className="text-sm text-[var(--text-tertiary)]">From: {inquiry.user?.name}</p>
+                                                        <p className="font-medium text-[foreground]">{inquiry.subject}</p>
+                                                        <p className="text-sm text-[muted-foreground]">From: {inquiry.user?.name}</p>
                                                     </div>
                                                 </div>
                                                 <span className={`badge ${
@@ -172,10 +174,10 @@ export default function ManagerDashboard({ propertyManager, stats, recentInquiri
                                     ))
                                 ) : (
                                     <div className="px-6 py-12 text-center">
-                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--layer-2)] flex items-center justify-center text-[var(--text-tertiary)]">
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[accent] flex items-center justify-center text-[muted-foreground]">
                                             <InquiryIcon />
                                         </div>
-                                        <p className="text-[var(--text-tertiary)]">No new inquiries yet</p>
+                                        <p className="text-[muted-foreground]">No new inquiries yet</p>
                                     </div>
                                 )}
                             </div>
@@ -184,9 +186,9 @@ export default function ManagerDashboard({ propertyManager, stats, recentInquiri
                         {/* Recent Reviews */}
                         <div className="card">
                             <div className="card-header">
-                                <h3 className="text-lg font-semibold text-[var(--text-primary)]">Recent Reviews</h3>
+                                <h3 className="text-lg font-semibold text-[foreground]">Recent Reviews</h3>
                             </div>
-                            <div className="divide-y divide-[var(--layer-3)]">
+                            <div className="divide-y divide-[border]">
                                 {recentReviews.length > 0 ? (
                                     recentReviews.map((review) => (
                                         <div key={review.id} className="px-6 py-4">
@@ -195,7 +197,7 @@ export default function ManagerDashboard({ propertyManager, stats, recentInquiri
                                                     {[...Array(5)].map((_, i) => (
                                                         <svg 
                                                             key={i} 
-                                                            className={`w-4 h-4 ${i < review.rating ? 'text-amber-500' : 'text-[var(--layer-3)]'}`} 
+                                                            className={`w-4 h-4 ${i < review.rating ? 'text-primary' : 'text-[border]'}`} 
                                                             fill="currentColor" 
                                                             viewBox="0 0 20 20"
                                                         >
@@ -203,24 +205,24 @@ export default function ManagerDashboard({ propertyManager, stats, recentInquiri
                                                         </svg>
                                                     ))}
                                                 </div>
-                                                <span className="text-xs font-mono text-[var(--text-tertiary)]">
+                                                <span className="text-xs font-mono text-[muted-foreground]">
                                                     {new Date(review.created_at).toLocaleDateString()}
                                                 </span>
                                             </div>
-                                            <p className="text-sm text-[var(--text-secondary)]">
+                                            <p className="text-sm text-[muted-foreground]">
                                                 {review.comment || 'No comment provided'}
                                             </p>
-                                            <p className="mt-2 text-xs text-[var(--text-tertiary)]">
+                                            <p className="mt-2 text-xs text-[muted-foreground]">
                                                 — {review.user?.name}
                                             </p>
                                         </div>
                                     ))
                                 ) : (
                                     <div className="px-6 py-12 text-center">
-                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--layer-2)] flex items-center justify-center text-[var(--text-tertiary)]">
+                                        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[accent] flex items-center justify-center text-[muted-foreground]">
                                             <ReviewIcon />
                                         </div>
-                                        <p className="text-[var(--text-tertiary)]">No reviews yet</p>
+                                        <p className="text-[muted-foreground]">No reviews yet</p>
                                     </div>
                                 )}
                             </div>

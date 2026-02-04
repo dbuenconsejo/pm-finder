@@ -7,14 +7,14 @@ export default function InquiriesIndex({ inquiries }) {
 
     return (
         <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-[var(--text-primary)]">Inquiries</h2>}
+            header={<h2 className="text-xl font-semibold leading-tight text-[foreground]">Inquiries</h2>}
         >
             <Head title="Inquiries" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="card">
-                        <div className="divide-y divide-[var(--border-color)]">
+                        <div className="divide-y divide-[border]">
                             {inquiries.data.length > 0 ? (
                                 inquiries.data.map((inquiry) => (
                                     <Link
@@ -26,7 +26,7 @@ export default function InquiriesIndex({ inquiries }) {
                                             <div className="flex items-center gap-4">
                                                 {/* Avatar with online status */}
                                                 <div className="relative">
-                                                    <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500 font-semibold">
+                                                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-semibold">
                                                         {isManager 
                                                             ? (inquiry.user?.name?.[0] || 'U')
                                                             : (inquiry.property_manager?.business_name?.[0] || inquiry.property_manager?.user?.name?.[0] || 'P')
@@ -44,8 +44,8 @@ export default function InquiriesIndex({ inquiries }) {
                                                     } />
                                                 </div>
                                                 <div className="flex-1">
-                                                    <h3 className="font-medium text-[var(--text-primary)]">{inquiry.subject}</h3>
-                                                    <p className="text-sm text-[var(--text-secondary)]">
+                                                    <h3 className="font-medium text-[foreground]">{inquiry.subject}</h3>
+                                                    <p className="text-sm text-[muted-foreground]">
                                                         {isManager ? (
                                                             <>From: {inquiry.user?.name}</>
                                                         ) : (
@@ -63,7 +63,7 @@ export default function InquiriesIndex({ inquiries }) {
                                                 <span className={`badge ${
                                                     inquiry.status === 'pending' ? 'badge-warning' :
                                                     inquiry.status === 'replied' ? 'badge-success' :
-                                                    inquiry.status === 'closed' ? 'bg-[var(--layer-3)] text-[var(--text-secondary)]' :
+                                                    inquiry.status === 'closed' ? 'bg-[border] text-[muted-foreground]' :
                                                     'badge-info'
                                                 }`}>
                                                     {inquiry.status}
@@ -87,7 +87,7 @@ export default function InquiriesIndex({ inquiries }) {
                                     ) : (
                                         <p className="text-[var(--text-muted)]">
                                             No inquiries sent yet.{' '}
-                                            <Link href={route('search')} className="text-amber-500 hover:underline">
+                                            <Link href={route('search')} className="text-primary hover:underline">
                                                 Find a property manager
                                             </Link>
                                         </p>
@@ -107,8 +107,8 @@ export default function InquiriesIndex({ inquiries }) {
                                         href={link.url || '#'}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                                             link.active
-                                                ? 'bg-amber-500 text-black'
-                                                : 'bg-[var(--layer-01)] text-[var(--text-secondary)] hover:bg-[var(--layer-02)] border border-[var(--border-color)]'
+                                                ? 'bg-primary text-black'
+                                                : 'bg-[var(--layer-01)] text-[muted-foreground] hover:bg-[var(--layer-02)] border border-[border]'
                                         } ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
                                         dangerouslySetInnerHTML={{ __html: link.label }}
                                     />

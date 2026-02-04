@@ -30,7 +30,7 @@ export default function AdminDashboard({ stats, recentUsers, pendingManagers }) 
                         </div>
                         <div className="overflow-hidden rounded-lg bg-white p-6 shadow">
                             <div className="text-sm font-medium text-gray-500">Pending Verification</div>
-                            <div className="mt-2 text-3xl font-bold text-amber-600">{stats.pendingVerification}</div>
+                            <div className="mt-2 text-3xl font-bold text-primary">{stats.pendingVerification}</div>
                         </div>
                         <div className="overflow-hidden rounded-lg bg-white p-6 shadow">
                             <div className="text-sm font-medium text-gray-500">Total Inquiries</div>
@@ -43,7 +43,7 @@ export default function AdminDashboard({ stats, recentUsers, pendingManagers }) 
                         <div className="overflow-hidden rounded-lg bg-white shadow">
                             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
                                 <h3 className="text-lg font-medium text-gray-900">Pending Verification</h3>
-                                <Link href={route('admin.verification-queue')} className="text-sm text-amber-600 hover:underline">
+                                <Link href={route('admin.verification-queue')} className="text-sm text-primary hover:underline">
                                     View all
                                 </Link>
                             </div>
@@ -77,7 +77,7 @@ export default function AdminDashboard({ stats, recentUsers, pendingManagers }) 
                         <div className="overflow-hidden rounded-lg bg-white shadow">
                             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
                                 <h3 className="text-lg font-medium text-gray-900">Recent Users</h3>
-                                <Link href={route('admin.users.index')} className="text-sm text-amber-600 hover:underline">
+                                <Link href={route('admin.users.index')} className="text-sm text-primary hover:underline">
                                     Manage users
                                 </Link>
                             </div>
@@ -111,7 +111,7 @@ export default function AdminDashboard({ stats, recentUsers, pendingManagers }) 
                         </Link>
                         <Link
                             href={route('admin.verification-queue')}
-                            className="inline-flex items-center rounded-md bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-500"
+                            className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary"
                         >
                             Verification Queue
                         </Link>
