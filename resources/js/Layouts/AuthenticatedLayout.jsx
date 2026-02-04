@@ -6,27 +6,46 @@ import NotificationBell from '@/Components/NotificationBell';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { useTheme } from '@/Contexts/ThemeContext';
-import { Sun, Moon, Menu, X, ChevronDown } from 'lucide-react';
+import { Sun, Moon, Menu, X, ChevronDown, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const { darkMode, toggleDarkMode } = useTheme();
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    
+    const isAdmin = user.role === 'admin';
 
     return (
-        <div className="min-h-screen bg-background relative">
-            {/* Background decorations */}
+        <div className={cn(
+            "min-h-screen bg-background relative",
+            isAdmin && "admin-theme"
+        )}>
+            {/* Background decorations - enhanced for admin */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-                <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-primary/15 to-purple-500/10 rounded-full blur-3xl" />
-                <div className="absolute top-1/3 -left-40 w-80 h-80 bg-gradient-to-tr from-violet-500/10 to-pink-500/5 rounded-full blur-3xl" />
-                <div className="absolute bottom-20 right-1/4 w-72 h-72 bg-gradient-to-tl from-cyan-500/10 to-primary/5 rounded-full blur-3xl" />
+                {isAdmin ? (
+                    <>
+                        {/* Admin-specific purple/violet gradient theme */}
+                        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-600/20 to-violet-600/15 rounded-full blur-3xl" />
+                        <div className="absolute top-1/3 -left-40 w-80 h-80 bg-gradient-to-tr from-indigo-600/15 to-purple-500/10 rounded-full blur-3xl" />
+                        <div className="absolute bottom-20 right-1/4 w-72 h-72 bg-gradient-to-tl from-violet-500/15 to-indigo-500/10 rounded-full blur-3xl" />
+                    </>
+                ) : (
+                    <>
+                        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-primary/15 to-purple-500/10 rounded-full blur-3xl" />
+                        <div className="absolute top-1/3 -left-40 w-80 h-80 bg-gradient-to-tr from-violet-500/10 to-pink-500/5 rounded-full blur-3xl" />
+                        <div className="absolute bottom-20 right-1/4 w-72 h-72 bg-gradient-to-tl from-cyan-500/10 to-primary/5 rounded-full blur-3xl" />
+                    </>
+                )}
                 
                 {/* Subtle grid pattern */}
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.08)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.08)_1px,transparent_1px)] bg-[size:48px_48px]" />
             </div>
 
-            <nav className="border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-sm">
+            <nav className={cn(
+                "border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-sm",
+                isAdmin && "border-purple-500/20"
+            )}>
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
@@ -57,6 +76,14 @@ export default function AuthenticatedLayout({ header, children }) {
                                         Inquiries
                                     </NavLink>
                                 )}
+                                
+                                {/* Admin badge */}
+                                {isAdmin && (
+                                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                                        <Shield className="w-4 h-4 text-purple-400" />
+                                        <span className="text-xs font-semibold text-purple-400 uppercase tracking-wide">Admin</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -64,7 +91,10 @@ export default function AuthenticatedLayout({ header, children }) {
                             {/* Dark Mode Toggle */}
                             <button
                                 onClick={toggleDarkMode}
-                                className="p-2.5 rounded-xl border border-transparent text-muted-foreground hover:text-primary hover:bg-primary/5 hover:border-primary/30 transition-all duration-300"
+                                className={cn(
+                                    "p-2.5 rounded-xl border border-transparent text-muted-foreground hover:text-primary hover:bg-primary/5 hover:border-primary/30 transition-all duration-300",
+                                    isAdmin && "hover:text-purple-400 hover:border-purple-500/30 hover:bg-purple-500/5"
+                                )}
                                 title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
                             >
                                 {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -107,10 +137,20 @@ export default function AuthenticatedLayout({ header, children }) {
                         </div>
 
                         <div className="-me-2 flex items-center gap-2 sm:hidden">
+                            {/* Mobile Admin Badge */}
+                            {isAdmin && (
+                                <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                                    <Shield className="w-3.5 h-3.5 text-purple-400" />
+                                </div>
+                            )}
+                            
                             {/* Mobile Dark Mode Toggle */}
                             <button
                                 onClick={toggleDarkMode}
-                                className="p-2.5 rounded-xl text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all duration-300"
+                                className={cn(
+                                    "p-2.5 rounded-xl text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all duration-300",
+                                    isAdmin && "hover:text-purple-400 hover:bg-purple-500/5"
+                                )}
                             >
                                 {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                             </button>
