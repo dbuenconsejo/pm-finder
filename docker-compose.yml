@@ -1,0 +1,100 @@
+services:
+  # PHP/Laravel Application
+  app:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile.fpm
+    container_name: pmfinder-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - pmfinder-network
+    depends_on:
+      - db
+      - redis
+
+  # Nginx Web Server
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: pmfinder-nginx
+    restart: unless-stopped
+    ports:
+      - "8888:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - pmfinder-network
+    depends_on:
+      - app
+
+  # Node.js for Vite Dev Server
+  node:
+    image: node:22-alpine
+    container_name: pmfinder-node
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "5174:5173"
+    networks:
+      - pmfinder-network
+    command: sh -c "npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - app
+
+  # MySQL Database
+  db:
+    image: mysql:8.4
+    container_name: pmfinder-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: pmfinder
+      MYSQL_USER: pmfinder
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: rootsecret
+    ports:
+      - "33066:3306"
+    volumes:
+      - pmfinder-db-data:/var/lib/mysql
+    networks:
+      - pmfinder-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: pmfinder-redis
+    restart: unless-stopped
+    ports:
+      - "63796:6379"
+    volumes:
+      - pmfinder-redis-data:/data
+    networks:
+      - pmfinder-network
+
+  # phpMyAdmin (Development)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: pmfinder-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: pmfinder
+      PMA_PASSWORD: secret
+    networks:
+      - pmfinder-network
+    depends_on:
+      - db
+
+networks:
+  pmfinder-network:
+    driver: bridge
+
+volumes:
+  pmfinder-db-data:
+  pmfinder-redis-data:

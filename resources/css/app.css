@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* Light mode (default) */
+        --background: #f4f4f4;
+        --layer-1: #ffffff;
+        --layer-01: #ffffff;
+        --layer-2: #f4f4f4;
+        --layer-02: #f4f4f4;
+        --layer-3: #e0e0e0;
+        --border-color: #e0e0e0;
+        --text-primary: #161616;
+        --text-secondary: #525252;
+        --text-tertiary: #6f6f6f;
+        --text-muted: #8d8d8d;
+        --amber-gold: #F5A623;
+        --amber-gold-light: #FFB84D;
+        --amber-gold-dark: #E59400;
+        --success: #198038;
+        --warning: #F1C21B;
+        --error: #DA1E28;
+        --info: #0043CE;
+        /* Message bubble colors - light mode */
+        --msg-bg: #f3f4f6;
+        --msg-border: #e5e7eb;
+        --msg-text: #111827;
+        --msg-meta: #6b7280;
+    }
+
+    .dark {
+        /* Dark mode - Console style */
+        --background: #0a0e14;
+        --layer-1: #141820;
+        --layer-01: #141820;
+        --layer-2: #1a1f28;
+        --layer-02: #1a1f28;
+        --layer-3: #1f2530;
+        --border-color: #2a3140;
+        --text-primary: #ffffff;
+        --text-secondary: #e3e8ef;
+        --text-tertiary: #9ba3af;
+        --text-muted: #6b7280;
+        --success: #3fb950;
+        --warning: #f59e0b;
+        --error: #f85149;
+        --info: #60a5fa;
+        /* Message bubble colors - dark mode */
+        --msg-bg: #374151;
+        --msg-border: #4b5563;
+        --msg-text: #ffffff;
+        --msg-meta: #9ca3af;
+    }
+
+    body {
+        @apply font-sans antialiased;
+        background-color: var(--background);
+        color: var(--text-primary);
+    }
+}
+
+@layer components {
+    /* Stat Card - Console style with accent strip */
+    .stat-card {
+        @apply relative overflow-hidden rounded-lg p-6 transition-all duration-300;
+        background-color: var(--layer-1);
+    }
+
+    .stat-card::before {
+        content: '';
+        @apply absolute top-0 left-0 right-0 h-1;
+        background: linear-gradient(90deg, 
+            transparent 0%, 
+            var(--amber-gold) 20%,
+            var(--amber-gold-light) 50%,
+            var(--amber-gold) 80%,
+            transparent 100%);
+        opacity: 0.7;
+    }
+
+    .stat-card:hover::before {
+        opacity: 1;
+    }
+
+    .stat-card:hover {
+        @apply shadow-lg;
+        box-shadow: 0 4px 20px rgba(245, 166, 35, 0.15);
+    }
+
+    .stat-label {
+        @apply text-xs font-medium uppercase tracking-wider;
+        color: var(--text-tertiary);
+    }
+
+    .stat-value {
+        @apply text-3xl font-bold font-mono mt-2;
+        color: var(--amber-gold);
+    }
+
+    .stat-change {
+        @apply text-sm font-mono mt-2 flex items-center gap-1;
+    }
+
+    .stat-change.positive {
+        color: var(--success);
+    }
+
+    .stat-change.negative {
+        color: var(--error);
+    }
+
+    /* Primary button - Golden Amber */
+    .btn-primary {
+        @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200;
+        background-color: var(--amber-gold);
+        color: #000;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--amber-gold-light);
+        @apply shadow-lg;
+        box-shadow: 0 4px 15px rgba(245, 166, 35, 0.4);
+    }
+
+    /* Secondary button */
+    .btn-secondary {
+        @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 border;
+        background-color: transparent;
+        border-color: var(--layer-3);
+        color: var(--text-secondary);
+    }
+
+    .btn-secondary:hover {
+        border-color: var(--amber-gold);
+        color: var(--amber-gold);
+    }
+
+    /* Card component */
+    .card {
+        @apply rounded-lg overflow-hidden shadow-md;
+        background-color: var(--layer-1);
+        border: 1px solid var(--layer-3);
+    }
+
+    .card-header {
+        @apply px-6 py-4 border-b;
+        border-color: var(--layer-3);
+    }
+
+    .card-body {
+        @apply p-6;
+    }
+
+    /* Navigation link */
+    .nav-link {
+        @apply px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200;
+        color: var(--text-secondary);
+    }
+
+    .nav-link:hover {
+        color: var(--amber-gold);
+        background-color: var(--layer-2);
+    }
+
+    .nav-link.active {
+        color: var(--amber-gold);
+        background-color: var(--layer-2);
+    }
+
+    /* Status badges */
+    .badge {
+        @apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold;
+    }
+
+    .badge-success {
+        background-color: rgba(63, 185, 80, 0.15);
+        color: var(--success);
+    }
+
+    .badge-warning {
+        background-color: rgba(245, 158, 11, 0.15);
+        color: var(--warning);
+    }
+
+    .badge-error {
+        background-color: rgba(248, 81, 73, 0.15);
+        color: var(--error);
+    }
+
+    .badge-info {
+        background-color: rgba(96, 165, 250, 0.15);
+        color: var(--info);
+    }
+
+    /* Input styling */
+    .input {
+        @apply w-full px-4 py-2 rounded-lg border transition-all duration-200;
+        background-color: var(--layer-1);
+        border-color: var(--layer-3);
+        color: var(--text-primary);
+    }
+
+    .input:focus {
+        @apply outline-none ring-2;
+        border-color: var(--amber-gold);
+        ring-color: rgba(245, 166, 35, 0.2);
+    }
+
+    .input::placeholder {
+        color: var(--text-tertiary);
+    }
+
+    /* Hexagon background pattern (subtle) */
+    .hex-pattern {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23F5A623' fill-opacity='0.03'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+}
+
+/* Scrollbar styling for dark mode */
+.dark ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: var(--layer-1);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: var(--layer-3);
+    border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
+}
+
+/* Toast animations */
+@keyframes slide-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-in {
+    animation: slide-in 0.3s ease-out;
+}
+
+/* Pulse animation for live indicator */
+@keyframes pulse-dot {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
