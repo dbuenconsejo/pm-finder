@@ -77,9 +77,9 @@ export default function SearchIndex({ propertyManagers, filters }) {
                                     </select>
                                 </div>
                                 <div className="flex items-end">
-                                    <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-purple-600 px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-xl hover:shadow-primary/40 hover:ring-2 hover:ring-primary/30 w-full">
-                                        <Search className="w-4 h-4" />
-                                        Search
+                                    <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-purple-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-xl hover:shadow-primary/40 hover:ring-2 hover:ring-primary/30 w-full">
+                                        <Search className="w-4 h-4" style={{ color: '#ffffff' }} />
+                                        <span style={{ color: '#ffffff' }}>Search</span>
                                     </button>
                                 </div>
                             </form>
@@ -200,7 +200,7 @@ export default function SearchIndex({ propertyManagers, filters }) {
                                         href={link.url || '#'}
                                         className={`px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                                             link.active
-                                                ? 'bg-gradient-to-r from-primary to-purple-600 text-primary-foreground shadow-md'
+                                                ? 'bg-gradient-to-r from-primary to-purple-600 text-white shadow-md'
                                                 : 'bg-card text-muted-foreground hover:bg-accent hover:text-primary border border-border hover:border-primary/30 hover:shadow-sm'
                                         } ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
                                         dangerouslySetInnerHTML={{ __html: link.label }}
@@ -248,7 +248,7 @@ export default function SearchIndex({ propertyManagers, filters }) {
                             <Link href={route('login')} className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
                                 Login
                             </Link>
-                            <Link href={route('register')} className="inline-flex items-center rounded-xl bg-gradient-to-r from-primary to-purple-600 px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl">
+                            <Link href={route('register')} className="inline-flex items-center rounded-xl bg-gradient-to-r from-primary to-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl">
                                 Register
                             </Link>
                         </div>

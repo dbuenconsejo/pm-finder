@@ -74,7 +74,7 @@ export default function Welcome({ auth }) {
                                 {auth.user ? (
                                     <Link
                                         href={route('dashboard')}
-                                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-primary-foreground font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:ring-2 hover:ring-primary/30 transition-all duration-300"
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:ring-2 hover:ring-primary/30 transition-all duration-300"
                                     >
                                         Dashboard
                                     </Link>
@@ -88,7 +88,7 @@ export default function Welcome({ auth }) {
                                         </Link>
                                         <Link
                                             href={route('register')}
-                                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-primary-foreground font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:ring-2 hover:ring-primary/30 transition-all duration-300"
+                                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:ring-2 hover:ring-primary/30 transition-all duration-300"
                                         >
                                             Get Started
                                         </Link>
@@ -135,7 +135,7 @@ export default function Welcome({ auth }) {
                                         />
                                         <button 
                                             type="submit" 
-                                            className="m-2 px-8 py-4 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-500 text-primary-foreground font-semibold rounded-xl flex items-center gap-2 transition-all duration-300 shadow-lg shadow-primary/25 hover:shadow-xl hover:ring-2 hover:ring-primary/30"
+                                            className="m-2 px-8 py-4 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-500 text-white font-semibold rounded-xl flex items-center gap-2 transition-all duration-300 shadow-lg shadow-primary/25 hover:shadow-xl hover:ring-2 hover:ring-primary/30"
                                         >
                                             <Search className="h-5 w-5" />
                                             <span className="hidden sm:inline">Search</span>

@@ -27,7 +27,7 @@ export default function Edit({ mustVerifyEmail, status }) {
                         <div className="relative">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary to-purple-600 shadow-lg shadow-primary/25">
-                                    <User className="w-5 h-5 text-white" />
+                                    <User className="w-5 h-5" style={{ color: '#ffffff' }} />
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-semibold text-foreground">Profile Information</h3>
@@ -48,7 +48,7 @@ export default function Edit({ mustVerifyEmail, status }) {
                         <div className="relative">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 shadow-lg shadow-blue-500/25">
-                                    <Lock className="w-5 h-5 text-white" />
+                                    <Lock className="w-5 h-5" style={{ color: '#ffffff' }} />
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-semibold text-foreground">Update Password</h3>
@@ -65,7 +65,7 @@ export default function Edit({ mustVerifyEmail, status }) {
                         <div className="relative">
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-2.5 rounded-xl bg-gradient-to-br from-red-500 to-rose-600 shadow-lg shadow-red-500/25">
-                                    <Trash2 className="w-5 h-5 text-white" />
+                                    <Trash2 className="w-5 h-5" style={{ color: '#ffffff' }} />
                                 </div>
                                 <div>
                                     <h3 className="text-lg font-semibold text-foreground">Delete Account</h3>

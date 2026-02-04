@@ -15,9 +15,9 @@ export default function OwnerDashboard({ stats, recentActivity, savedPropertyMan
                             Manage your property manager searches and inquiries
                         </p>
                     </div>
-                    <Link href={route('search')} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-primary-foreground font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:ring-2 hover:ring-primary/30 transition-all duration-300">
-                        <Search className="w-4 h-4" />
-                        Find Property Managers
+                    <Link href={route('search')} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:ring-2 hover:ring-primary/30 transition-all duration-300">
+                        <Search className="w-4 h-4" style={{ color: '#ffffff' }} />
+                        <span style={{ color: '#ffffff' }}>Find Property Managers</span>
                     </Link>
                 </div>
             }
@@ -98,8 +98,8 @@ export default function OwnerDashboard({ stats, recentActivity, savedPropertyMan
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="relative">
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-purple-600 border-2 border-primary/30 flex items-center justify-center shadow-md">
-                                                    <span className="text-sm font-bold text-white">
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-purple-500/20 border-2 border-primary/30 flex items-center justify-center shadow-md">
+                                                    <span className="text-sm font-bold text-primary">
                                                         {activity.property_manager?.business_name?.[0] || 'P'}
                                                     </span>
                                                 </div>
@@ -117,14 +117,21 @@ export default function OwnerDashboard({ stats, recentActivity, savedPropertyMan
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
-                                                activity.status === 'replied' ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800' :
-                                                activity.status === 'pending' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400 border-amber-200 dark:border-amber-800' :
-                                                'bg-primary/10 text-primary border-primary/20'
-                                            }`}>
+                                            <span 
+                                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                                                    activity.status === 'replied' ? 'bg-emerald-100 dark:bg-emerald-900/30 border-emerald-300 dark:border-emerald-800' :
+                                                    activity.status === 'pending' ? 'bg-amber-100 dark:bg-amber-900/30 border-amber-300 dark:border-amber-800' :
+                                                    'bg-primary/10 border-primary/20'
+                                                }`}
+                                                style={{ 
+                                                    color: activity.status === 'replied' ? '#047857' : 
+                                                           activity.status === 'pending' ? '#b45309' : 
+                                                           'inherit' 
+                                                }}
+                                            >
                                                 {activity.status}
                                             </span>
-                                            <ArrowRight className="w-4 h-4 text-foreground" />
+                                            <ArrowRight className="w-4 h-4 text-muted-foreground" />
                                         </div>
                                     </Link>
                                 ))
@@ -134,7 +141,7 @@ export default function OwnerDashboard({ stats, recentActivity, savedPropertyMan
                                         <MessageSquare className="w-6 h-6 text-muted-foreground" />
                                     </div>
                                     <p className="text-muted-foreground mb-4">No recent activity</p>
-                                    <Link href={route('search')} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-primary-foreground font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:ring-2 hover:ring-primary/30 transition-all duration-300">
+                                    <Link href={route('search')} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-purple-600 text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:ring-2 hover:ring-primary/30 transition-all duration-300">
                                         Find a Property Manager
                                     </Link>
                                 </div>
@@ -159,8 +166,8 @@ export default function OwnerDashboard({ stats, recentActivity, savedPropertyMan
                                             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                             <div className="relative p-5">
                                                 <div className="flex items-center gap-4">
-                                                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shrink-0 ring-2 ring-primary/30 group-hover:ring-primary/50 transition-all duration-300 shadow-lg">
-                                                        <span className="text-xl font-bold text-white">
+                                                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center shrink-0 ring-2 ring-primary/30 group-hover:ring-primary/50 transition-all duration-300 shadow-md">
+                                                        <span className="text-xl font-bold text-primary">
                                                             {pm.business_name?.[0] || pm.user?.name?.[0] || 'P'}
                                                         </span>
                                                     </div>

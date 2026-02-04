@@ -81,7 +81,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                                 type="button"
                                                 className="group inline-flex items-center gap-2 rounded-xl border border-border/50 bg-card px-3 py-2 text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 focus:outline-none"
                                             >
-                                                <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-semibold text-sm shadow-md shadow-primary/25 group-hover:shadow-lg group-hover:shadow-primary/30 transition-shadow">
+                                                <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center text-primary font-semibold text-sm shadow-md group-hover:shadow-lg transition-shadow">
                                                     {user.name?.[0]?.toUpperCase() || 'U'}
                                                 </span>
                                                 <span className="hidden lg:inline">{user.name}</span>
@@ -151,7 +151,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
                     <div className="border-t border-border/50 py-4">
                         <div className="px-4 flex items-center gap-3">
-                            <span className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-semibold text-lg shadow-lg shadow-primary/25">
+                            <span className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center text-primary font-semibold text-lg shadow-md">
                                 {user.name?.[0]?.toUpperCase() || 'U'}
                             </span>
                             <div>
