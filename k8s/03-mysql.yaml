@@ -1,0 +1,123 @@
+# =====================================================
+# MySQL StatefulSet + Service + PVC
+# =====================================================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pmfinder-mysql-pvc
+  namespace: pmfinder
+  labels:
+    app.kubernetes.io/name: pmfinder
+    app.kubernetes.io/component: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  # For bare metal, you need a StorageClass (local-path, nfs, longhorn, etc.)
+  # k3s comes with local-path-provisioner by default
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pmfinder-mysql
+  namespace: pmfinder
+  labels:
+    app.kubernetes.io/name: pmfinder
+    app.kubernetes.io/component: database
+spec:
+  serviceName: pmfinder-mysql
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pmfinder
+      app.kubernetes.io/component: database
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pmfinder
+        app.kubernetes.io/component: database
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.4
+          ports:
+            - containerPort: 3306
+              name: mysql
+          envFrom:
+            - secretRef:
+                name: pmfinder-db-secret
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+            - name: mysql-config
+              mountPath: /etc/mysql/conf.d/custom.cnf
+              subPath: custom.cnf
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: pmfinder-mysql-pvc
+        - name: mysql-config
+          configMap:
+            name: pmfinder-mysql-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pmfinder-mysql-config
+  namespace: pmfinder
+data:
+  custom.cnf: |
+    [mysqld]
+    default-authentication-plugin=caching_sha2_password
+    innodb_buffer_pool_size=256M
+    max_connections=100
+    character-set-server=utf8mb4
+    collation-server=utf8mb4_unicode_ci
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pmfinder-mysql
+  namespace: pmfinder
+  labels:
+    app.kubernetes.io/name: pmfinder
+    app.kubernetes.io/component: database
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3306
+      targetPort: 3306
+      name: mysql
+  selector:
+    app.kubernetes.io/name: pmfinder
+    app.kubernetes.io/component: database

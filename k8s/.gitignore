@@ -1,0 +1,2 @@
+# Add to .gitignore — never commit real secrets
+k8s/01-secrets.yaml

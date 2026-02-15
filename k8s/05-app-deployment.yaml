@@ -1,0 +1,191 @@
+# =====================================================
+# PM Finder App Deployment (nginx + php-fpm sidecar)
+# =====================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pmfinder-app
+  namespace: pmfinder
+  labels:
+    app.kubernetes.io/name: pmfinder
+    app.kubernetes.io/component: app
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pmfinder
+      app.kubernetes.io/component: app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pmfinder
+        app.kubernetes.io/component: app
+    spec:
+      # Init container: copy app code to shared volume so nginx can serve static files
+      initContainers:
+        - name: copy-public
+          image: YOUR_REGISTRY/pmfinder-app:latest  # <-- Replace with your registry
+          command: ["sh", "-c", "cp -r /var/www/html/public/* /shared-public/"]
+          volumeMounts:
+            - name: shared-public
+              mountPath: /shared-public
+
+        # Run migrations on deploy
+        - name: migrate
+          image: YOUR_REGISTRY/pmfinder-app:latest  # <-- Replace with your registry
+          command: ["php", "artisan", "migrate", "--force"]
+          envFrom:
+            - configMapRef:
+                name: pmfinder-app-config
+          env:
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: pmfinder-app-secret
+                  key: APP_KEY
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: pmfinder-db-secret
+                  key: MYSQL_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pmfinder-db-secret
+                  key: MYSQL_PASSWORD
+
+      containers:
+        # ───────────────────────────────
+        # Container 1: PHP-FPM (Laravel)
+        # ───────────────────────────────
+        - name: php-fpm
+          image: YOUR_REGISTRY/pmfinder-app:latest  # <-- Replace with your registry
+          ports:
+            - containerPort: 9000
+              name: php-fpm
+          envFrom:
+            - configMapRef:
+                name: pmfinder-app-config
+          env:
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: pmfinder-app-secret
+                  key: APP_KEY
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: pmfinder-db-secret
+                  key: MYSQL_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pmfinder-db-secret
+                  key: MYSQL_PASSWORD
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            exec:
+              command:
+                - php-fpm-healthcheck
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - php-fpm-healthcheck
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+          volumeMounts:
+            - name: storage
+              mountPath: /var/www/html/storage/app/public
+            - name: shared-public
+              mountPath: /var/www/html/public
+              readOnly: false
+
+        # ───────────────────────────────
+        # Container 2: Nginx (sidecar)
+        # ───────────────────────────────
+        - name: nginx
+          image: YOUR_REGISTRY/pmfinder-nginx:latest  # <-- Replace with your registry
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "25m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          volumeMounts:
+            - name: shared-public
+              mountPath: /var/www/html/public
+              readOnly: true
+
+      volumes:
+        - name: shared-public
+          emptyDir: {}
+        - name: storage
+          persistentVolumeClaim:
+            claimName: pmfinder-storage-pvc
+---
+# PVC for user uploads / storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pmfinder-storage-pvc
+  namespace: pmfinder
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 5Gi
+---
+# =====================================================
+# App Service (points to nginx container in the pod)
+# =====================================================
+apiVersion: v1
+kind: Service
+metadata:
+  name: pmfinder-app
+  namespace: pmfinder
+  labels:
+    app.kubernetes.io/name: pmfinder
+    app.kubernetes.io/component: app
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      name: http
+  selector:
+    app.kubernetes.io/name: pmfinder
+    app.kubernetes.io/component: app

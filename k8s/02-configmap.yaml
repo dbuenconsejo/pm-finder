@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pmfinder-app-config
+  namespace: pmfinder
+  labels:
+    app.kubernetes.io/name: pmfinder
+    app.kubernetes.io/component: app
+data:
+  APP_NAME: "PM Finder"
+  APP_ENV: "production"
+  APP_DEBUG: "false"
+  APP_URL: "https://pmfinder.yourdomain.com"
+
+  LOG_CHANNEL: "stderr"
+  LOG_LEVEL: "warning"
+
+  DB_CONNECTION: "mysql"
+  DB_HOST: "pmfinder-mysql"
+  DB_PORT: "3306"
+  DB_DATABASE: "pmfinder"
+
+  CACHE_STORE: "redis"
+  SESSION_DRIVER: "redis"
+  QUEUE_CONNECTION: "redis"
+
+  REDIS_HOST: "pmfinder-redis"
+  REDIS_PORT: "6379"
+  REDIS_PASSWORD: ""
+
+  MAIL_MAILER: "smtp"
+  MAIL_HOST: "mailpit"
+  MAIL_PORT: "1025"
+
+  FILESYSTEM_DISK: "local"

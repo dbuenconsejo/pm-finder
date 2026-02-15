@@ -1,0 +1,45 @@
+# =====================================================
+# Ingress — Routes external traffic to the app
+# =====================================================
+# Works with:
+#   - k3s built-in Traefik (default)
+#   - ingress-nginx (set ingressClassName: nginx)
+#   - cert-manager for automatic TLS
+# =====================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pmfinder-ingress
+  namespace: pmfinder
+  labels:
+    app.kubernetes.io/name: pmfinder
+  annotations:
+    # ── For cert-manager (automatic Let's Encrypt TLS) ──
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+    # ── For Traefik (k3s default) ──
+    # traefik.ingress.kubernetes.io/router.entrypoints: websecure
+
+    # ── For ingress-nginx ──
+    # nginx.ingress.kubernetes.io/proxy-body-size: "40m"
+    # nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  # Use "traefik" for k3s, "nginx" for ingress-nginx
+  ingressClassName: traefik
+  rules:
+    - host: pmfinder.yourdomain.com    # <-- Replace with your domain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: pmfinder-app
+                port:
+                  number: 80
+  # Uncomment for TLS (requires cert-manager or manual secret)
+  # tls:
+  #   - hosts:
+  #       - pmfinder.yourdomain.com
+  #     secretName: pmfinder-tls
