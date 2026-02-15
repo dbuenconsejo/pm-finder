@@ -26,6 +26,9 @@ class PropertyManager extends Model
         'barangay',
         'service_radius_km',
         'is_verified',
+        'verification_status',
+        'verification_notes',
+        'verification_submitted_at',
         'is_available',
         'rating',
         'review_count',
@@ -41,6 +44,7 @@ class PropertyManager extends Model
         'is_verified' => 'boolean',
         'is_available' => 'boolean',
         'rating' => 'decimal:1',
+        'verification_submitted_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -71,6 +75,11 @@ class PropertyManager extends Model
     public function galleryImages(): HasMany
     {
         return $this->hasMany(GalleryImage::class)->orderBy('sort_order');
+    }
+
+    public function verificationDocuments(): HasMany
+    {
+        return $this->hasMany(VerificationDocument::class)->orderByDesc('created_at');
     }
 
     public function savedByUsers(): BelongsToMany

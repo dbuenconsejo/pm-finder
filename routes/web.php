@@ -52,6 +52,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/property-managers/{propertyManager}/gallery', [PropertyManagerController::class, 'uploadGallery'])->name('property-managers.gallery.upload');
     Route::delete('/property-managers/{propertyManager}/gallery/{image}', [PropertyManagerController::class, 'deleteGalleryImage'])->name('property-managers.gallery.delete');
 
+    // Verification documents
+    Route::post('/property-managers/{propertyManager}/verification-documents', [PropertyManagerController::class, 'uploadVerificationDocuments'])->name('property-managers.verification.upload');
+    Route::delete('/property-managers/{propertyManager}/verification-documents/{document}', [PropertyManagerController::class, 'deleteVerificationDocument'])->name('property-managers.verification.delete');
+    Route::post('/property-managers/{propertyManager}/submit-verification', [PropertyManagerController::class, 'submitForVerification'])->name('property-managers.verification.submit');
+
     // Inquiries
     Route::resource('inquiries', InquiryController::class);
     Route::post('/inquiries/{inquiry}/reply', [InquiryController::class, 'reply'])->name('inquiries.reply');
@@ -72,8 +77,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Admin routes
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/verification-queue', [AdminController::class, 'verificationQueue'])->name('verification-queue');
+    Route::get('/verification-review/{propertyManager}', [AdminController::class, 'reviewVerification'])->name('verification-review');
     Route::post('/verify/{propertyManager}', [AdminController::class, 'verify'])->name('verify');
+    Route::post('/reject/{propertyManager}', [AdminController::class, 'reject'])->name('reject');
     Route::post('/unverify/{propertyManager}', [AdminController::class, 'unverify'])->name('unverify');
+    Route::post('/review-document/{document}', [AdminController::class, 'reviewDocument'])->name('review-document');
     Route::resource('users', UserManagementController::class);
 });
 

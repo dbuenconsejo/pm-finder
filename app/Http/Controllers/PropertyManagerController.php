@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PropertyManager;
 use App\Models\Property;
 use App\Models\GalleryImage;
+use App\Models\VerificationDocument;
 use App\Models\ServiceArea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -100,10 +101,11 @@ class PropertyManagerController extends Controller
     {
         $this->authorize('update', $propertyManager);
 
-        $propertyManager->load(['properties', 'serviceAreas', 'galleryImages']);
+        $propertyManager->load(['properties', 'serviceAreas', 'galleryImages', 'verificationDocuments']);
 
         return Inertia::render('PropertyManagers/Edit', [
             'propertyManager' => $propertyManager,
+            'documentTypes' => VerificationDocument::documentTypes(),
         ]);
     }
 
@@ -235,6 +237,77 @@ class PropertyManagerController extends Controller
         $image->delete();
 
         return back()->with('success', 'Image removed.');
+    }
+
+    /**
+     * Upload verification documents.
+     */
+    public function uploadVerificationDocuments(Request $request, PropertyManager $propertyManager)
+    {
+        $this->authorize('update', $propertyManager);
+
+        $request->validate([
+            'documents' => 'required|array|max:10',
+            'documents.*.file' => 'required|file|mimes:jpeg,png,webp,pdf|max:10240',
+            'documents.*.document_type' => 'required|string|in:government_id,business_permit,certification,proof_of_address,other',
+            'documents.*.document_name' => 'nullable|string|max:255',
+        ]);
+
+        foreach ($request->documents as $doc) {
+            $path = $doc['file']->store('verifications', 'public');
+            $propertyManager->verificationDocuments()->create([
+                'document_type' => $doc['document_type'],
+                'document_name' => $doc['document_name'] ?? $doc['file']->getClientOriginalName(),
+                'file_path' => $path,
+                'status' => 'pending',
+            ]);
+        }
+
+        return back()->with('success', 'Documents uploaded successfully!');
+    }
+
+    /**
+     * Delete a verification document.
+     */
+    public function deleteVerificationDocument(PropertyManager $propertyManager, VerificationDocument $document)
+    {
+        $this->authorize('update', $propertyManager);
+
+        if ($document->property_manager_id !== $propertyManager->id) {
+            abort(403);
+        }
+
+        // Only allow deletion of pending or rejected documents
+        if ($document->status === 'approved') {
+            return back()->withErrors(['document' => 'Cannot delete an approved document.']);
+        }
+
+        Storage::disk('public')->delete($document->file_path);
+        $document->delete();
+
+        return back()->with('success', 'Document removed.');
+    }
+
+    /**
+     * Submit documents for verification review.
+     */
+    public function submitForVerification(PropertyManager $propertyManager)
+    {
+        $this->authorize('update', $propertyManager);
+
+        $pendingDocs = $propertyManager->verificationDocuments()->where('status', 'pending')->count();
+
+        if ($pendingDocs === 0) {
+            return back()->withErrors(['documents' => 'Please upload at least one document before submitting.']);
+        }
+
+        $propertyManager->update([
+            'verification_status' => 'pending',
+            'verification_submitted_at' => now(),
+            'verification_notes' => null,
+        ]);
+
+        return back()->with('success', 'Your documents have been submitted for verification review!');
     }
 
     /**

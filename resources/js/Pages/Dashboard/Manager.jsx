@@ -46,6 +46,14 @@ const ExternalLinkIcon = () => (
 );
 
 export default function ManagerDashboard({ propertyManager, stats, recentInquiries, recentReviews }) {
+    const verificationStatusConfig = {
+        unsubmitted: { label: 'Not Verified', description: 'Submit documents to get verified', color: 'text-muted-foreground', bg: 'bg-muted border-border', icon: '🔒' },
+        pending: { label: 'Under Review', description: 'Your documents are being reviewed', color: 'text-amber-600', bg: 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/30', icon: '⏳' },
+        approved: { label: 'Verified ✓', description: 'Your profile is verified', color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/30', icon: '✅' },
+        rejected: { label: 'Rejected', description: 'Please review feedback and resubmit', color: 'text-red-600', bg: 'bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/30', icon: '❌' },
+    };
+    const vStatus = verificationStatusConfig[propertyManager.verification_status] || verificationStatusConfig.unsubmitted;
+
     return (
         <AuthenticatedLayout
             header={
@@ -134,6 +142,30 @@ export default function ManagerDashboard({ propertyManager, stats, recentInquiri
                             </div>
                         </div>
                     </div>
+
+                    {/* Verification Status Banner */}
+                    {propertyManager.verification_status !== 'approved' && (
+                        <div className={`mb-8 p-4 rounded-2xl border ${vStatus.bg} flex items-center justify-between`}>
+                            <div className="flex items-center gap-3">
+                                <span className="text-2xl">{vStatus.icon}</span>
+                                <div>
+                                    <h3 className={`font-semibold ${vStatus.color}`}>{vStatus.label}</h3>
+                                    <p className="text-sm text-muted-foreground">{vStatus.description}</p>
+                                    {propertyManager.verification_status === 'rejected' && propertyManager.verification_notes && (
+                                        <p className="text-sm text-red-500 mt-1">Feedback: {propertyManager.verification_notes}</p>
+                                    )}
+                                </div>
+                            </div>
+                            {(propertyManager.verification_status === 'unsubmitted' || propertyManager.verification_status === 'rejected') && (
+                                <Link
+                                    href={route('property-managers.edit', propertyManager.id)}
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/25 hover:shadow-xl transition-all duration-200"
+                                >
+                                    Submit Documents
+                                </Link>
+                            )}
+                        </div>
+                    )}
 
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
                         {/* New Inquiries */}

@@ -1,9 +1,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, router } from '@inertiajs/react';
-import { Building2, Phone, MapPin, Briefcase, User, Camera, X, Upload, Trash2, Image as ImageIcon } from 'lucide-react';
+import { Building2, Phone, MapPin, Briefcase, User, Camera, X, Upload, Trash2, Image as ImageIcon, ShieldCheck, FileText, AlertCircle, CheckCircle2, XCircle, Clock, Send } from 'lucide-react';
 import { useState, useRef } from 'react';
 
-export default function PropertyManagerEdit({ propertyManager }) {
+export default function PropertyManagerEdit({ propertyManager, documentTypes }) {
     const { data, setData, post, processing, errors, progress } = useForm({
         _method: 'PUT',
         business_name: propertyManager.business_name || '',
@@ -25,6 +25,12 @@ export default function PropertyManagerEdit({ propertyManager }) {
     const avatarInputRef = useRef(null);
     const galleryInputRef = useRef(null);
     const [galleryUploading, setGalleryUploading] = useState(false);
+    
+    // Verification documents state
+    const verificationInputRef = useRef(null);
+    const [verificationUploading, setVerificationUploading] = useState(false);
+    const [pendingDocs, setPendingDocs] = useState([]);
+    const [selectedDocType, setSelectedDocType] = useState('government_id');
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
@@ -104,6 +110,60 @@ export default function PropertyManagerEdit({ propertyManager }) {
             router.delete(route('property-managers.gallery.delete', [propertyManager.id, imageId]));
         }
     };
+
+    // Verification document handlers
+    const handleVerificationFilesSelected = (e) => {
+        const files = Array.from(e.target.files);
+        const newDocs = files.map((file) => ({
+            file,
+            document_type: selectedDocType,
+            document_name: file.name,
+            preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null,
+        }));
+        setPendingDocs((prev) => [...prev, ...newDocs]);
+        if (verificationInputRef.current) verificationInputRef.current.value = '';
+    };
+
+    const removePendingDoc = (index) => {
+        setPendingDocs((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    const handleUploadVerificationDocs = () => {
+        if (!pendingDocs.length) return;
+
+        setVerificationUploading(true);
+        const formData = new FormData();
+        pendingDocs.forEach((doc, i) => {
+            formData.append(`documents[${i}][file]`, doc.file);
+            formData.append(`documents[${i}][document_type]`, doc.document_type);
+            formData.append(`documents[${i}][document_name]`, doc.document_name);
+        });
+
+        router.post(route('property-managers.verification.upload', propertyManager.id), formData, {
+            forceFormData: true,
+            onSuccess: () => setPendingDocs([]),
+            onFinish: () => setVerificationUploading(false),
+        });
+    };
+
+    const handleDeleteVerificationDoc = (docId) => {
+        if (confirm('Remove this document?')) {
+            router.delete(route('property-managers.verification.delete', [propertyManager.id, docId]));
+        }
+    };
+
+    const handleSubmitForVerification = () => {
+        router.post(route('property-managers.verification.submit', propertyManager.id));
+    };
+
+    const verificationStatusConfig = {
+        unsubmitted: { label: 'Not Submitted', color: 'text-muted-foreground', bg: 'bg-muted', icon: Clock },
+        pending: { label: 'Under Review', color: 'text-amber-600', bg: 'bg-amber-50 dark:bg-amber-500/10', icon: Clock },
+        approved: { label: 'Verified', color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-500/10', icon: CheckCircle2 },
+        rejected: { label: 'Rejected', color: 'text-red-600', bg: 'bg-red-50 dark:bg-red-500/10', icon: XCircle },
+    };
+
+    const currentStatus = verificationStatusConfig[propertyManager.verification_status] || verificationStatusConfig.unsubmitted;
 
     return (
         <AuthenticatedLayout
@@ -457,6 +517,229 @@ export default function PropertyManagerEdit({ propertyManager }) {
                                 </div>
                             )}
                             {errors.images && <p className="mt-4 text-sm text-red-500">{errors.images}</p>}
+                        </div>
+                    </div>
+
+                    {/* Verification Documents Section */}
+                    <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm">
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500" />
+                        
+                        <div className="p-6 sm:p-8">
+                            {/* Header with Status */}
+                            <div className="flex items-center justify-between mb-6">
+                                <div>
+                                    <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                                        <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                                        Verification Documents
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground mt-1">
+                                        Upload your ID and documents to get verified
+                                    </p>
+                                </div>
+                                <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium ${currentStatus.bg} ${currentStatus.color}`}>
+                                    <currentStatus.icon className="w-4 h-4" />
+                                    {currentStatus.label}
+                                </div>
+                            </div>
+
+                            {/* Rejection Feedback */}
+                            {propertyManager.verification_status === 'rejected' && propertyManager.verification_notes && (
+                                <div className="mb-6 p-4 rounded-xl border border-red-200 dark:border-red-500/30 bg-red-50 dark:bg-red-500/10">
+                                    <div className="flex items-start gap-3">
+                                        <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                                        <div>
+                                            <h4 className="text-sm font-semibold text-red-700 dark:text-red-400">Verification Rejected</h4>
+                                            <p className="text-sm text-red-600 dark:text-red-400/80 mt-1">{propertyManager.verification_notes}</p>
+                                            <p className="text-xs text-red-500/70 mt-2">Please address the feedback and resubmit your documents.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Already Verified */}
+                            {propertyManager.verification_status === 'approved' && (
+                                <div className="mb-6 p-4 rounded-xl border border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10">
+                                    <div className="flex items-center gap-3">
+                                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                                        <p className="text-sm text-emerald-700 dark:text-emerald-400">Your profile is verified! Your verified badge is visible to all users.</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Pending Review Notice */}
+                            {propertyManager.verification_status === 'pending' && (
+                                <div className="mb-6 p-4 rounded-xl border border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10">
+                                    <div className="flex items-center gap-3">
+                                        <Clock className="w-5 h-5 text-amber-500" />
+                                        <p className="text-sm text-amber-700 dark:text-amber-400">Your documents are under review. We'll update your status shortly.</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Existing Documents */}
+                            {propertyManager.verification_documents && propertyManager.verification_documents.length > 0 && (
+                                <div className="mb-6">
+                                    <h4 className="text-sm font-semibold text-foreground mb-3">Submitted Documents</h4>
+                                    <div className="space-y-3">
+                                        {propertyManager.verification_documents.map((doc) => {
+                                            const statusColors = {
+                                                pending: 'bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/30',
+                                                approved: 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/30',
+                                                rejected: 'bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/30',
+                                            };
+                                            const statusLabels = {
+                                                pending: { text: 'Pending', color: 'text-amber-600 dark:text-amber-400' },
+                                                approved: { text: 'Approved', color: 'text-emerald-600 dark:text-emerald-400' },
+                                                rejected: { text: 'Rejected', color: 'text-red-600 dark:text-red-400' },
+                                            };
+                                            const status = statusLabels[doc.status] || statusLabels.pending;
+
+                                            return (
+                                                <div key={doc.id} className={`flex items-center justify-between p-4 rounded-xl border ${statusColors[doc.status]}`}>
+                                                    <div className="flex items-center gap-3 min-w-0">
+                                                        <div className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center flex-shrink-0">
+                                                            {doc.is_image && doc.file_url ? (
+                                                                <img src={doc.file_url} alt="" className="w-full h-full object-cover rounded-lg" />
+                                                            ) : (
+                                                                <FileText className="w-5 h-5 text-muted-foreground" />
+                                                            )}
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-sm font-medium text-foreground truncate">{doc.document_name}</p>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {documentTypes?.[doc.document_type] || doc.document_type}
+                                                            </p>
+                                                            {doc.admin_notes && doc.status === 'rejected' && (
+                                                                <p className="text-xs text-red-500 mt-1">Note: {doc.admin_notes}</p>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-3 flex-shrink-0">
+                                                        <span className={`text-xs font-medium ${status.color}`}>{status.text}</span>
+                                                        {doc.file_url && (
+                                                            <a
+                                                                href={doc.file_url}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="p-1.5 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors"
+                                                                title="View document"
+                                                            >
+                                                                <FileText className="w-4 h-4" />
+                                                            </a>
+                                                        )}
+                                                        {doc.status !== 'approved' && (
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleDeleteVerificationDoc(doc.id)}
+                                                                className="p-1.5 rounded-lg text-muted-foreground hover:text-red-500 hover:bg-red-500/5 transition-colors"
+                                                                title="Remove document"
+                                                            >
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Upload New Documents (only if not currently pending review) */}
+                            {propertyManager.verification_status !== 'pending' && (
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="flex-1">
+                                            <label className="block text-xs font-medium text-muted-foreground mb-1.5">Document Type</label>
+                                            <select
+                                                value={selectedDocType}
+                                                onChange={(e) => setSelectedDocType(e.target.value)}
+                                                className="w-full rounded-xl border border-border bg-background text-foreground px-4 py-2.5 shadow-sm transition-all duration-200 hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
+                                            >
+                                                {documentTypes && Object.entries(documentTypes).map(([value, label]) => (
+                                                    <option key={value} value={value}>{label}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className="pt-5">
+                                            <input
+                                                ref={verificationInputRef}
+                                                type="file"
+                                                accept="image/jpeg,image/png,image/webp,application/pdf"
+                                                multiple
+                                                onChange={handleVerificationFilesSelected}
+                                                className="hidden"
+                                                id="verification-upload"
+                                            />
+                                            <label
+                                                htmlFor="verification-upload"
+                                                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border text-sm font-medium text-foreground hover:border-primary/50 hover:bg-primary/5 cursor-pointer transition-all duration-200"
+                                            >
+                                                <Upload className="w-4 h-4" />
+                                                Select Files
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-muted-foreground">Accepted: JPEG, PNG, WebP, PDF. Max 10MB per file.</p>
+
+                                    {/* Pending uploads preview */}
+                                    {pendingDocs.length > 0 && (
+                                        <div className="space-y-2">
+                                            <h4 className="text-sm font-medium text-foreground">Ready to upload ({pendingDocs.length})</h4>
+                                            {pendingDocs.map((doc, index) => (
+                                                <div key={index} className="flex items-center justify-between p-3 rounded-xl border border-border bg-muted/30">
+                                                    <div className="flex items-center gap-3 min-w-0">
+                                                        {doc.preview ? (
+                                                            <img src={doc.preview} alt="" className="w-10 h-10 rounded-lg object-cover" />
+                                                        ) : (
+                                                            <div className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center">
+                                                                <FileText className="w-5 h-5 text-muted-foreground" />
+                                                            </div>
+                                                        )}
+                                                        <div className="min-w-0">
+                                                            <p className="text-sm text-foreground truncate">{doc.document_name}</p>
+                                                            <p className="text-xs text-muted-foreground">{documentTypes?.[doc.document_type] || doc.document_type}</p>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removePendingDoc(index)}
+                                                        className="p-1.5 rounded-lg text-muted-foreground hover:text-red-500 transition-colors"
+                                                    >
+                                                        <X className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            <button
+                                                type="button"
+                                                onClick={handleUploadVerificationDocs}
+                                                disabled={verificationUploading}
+                                                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:ring-2 hover:ring-emerald-500/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
+                                                <Upload className="w-4 h-4" />
+                                                {verificationUploading ? 'Uploading...' : 'Upload Documents'}
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {/* Submit for Verification Button */}
+                                    {propertyManager.verification_status !== 'approved' && 
+                                     propertyManager.verification_documents && 
+                                     propertyManager.verification_documents.some(d => d.status === 'pending') && (
+                                        <div className="pt-4 border-t border-border/50">
+                                            <button
+                                                type="button"
+                                                onClick={handleSubmitForVerification}
+                                                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-primary to-purple-600 shadow-lg shadow-primary/25 hover:shadow-xl hover:ring-2 hover:ring-primary/30 transition-all duration-200"
+                                            >
+                                                <Send className="w-4 h-4" />
+                                                Submit for Verification
+                                            </button>
+                                            <p className="text-xs text-muted-foreground mt-2">Once submitted, an admin will review your documents.</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
