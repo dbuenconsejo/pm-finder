@@ -72,18 +72,70 @@
 
 ## ⬜ Pending Features (Future Phases)
 
-### Google Maps Integration
-- [ ] Interactive map displaying PM locations
-- [ ] Clickable map markers with PM info popup
-- [ ] Radius-based filtering (5km, 10km, 25km)
-- [ ] Service area visualization
-- [ ] Location autocomplete in search bar
+### Google Maps Integration — PM Search
+- [ ] Embed interactive Google Map on the PM search/finder page
+- [ ] Plot PM locations as markers based on search results
+- [ ] Clickable markers showing PM info popup (name, avatar, rating, verified badge)
+- [ ] Radius-based filtering (5km, 10km, 25km, 50km) from a chosen location
+- [ ] Service area polygon/circle visualization on map
+- [ ] Location autocomplete in search bar (Google Places API)
+- [ ] Map ↔ list view sync (highlight card when marker clicked, vice-versa)
+- [ ] Cluster markers when zoomed out
+- [ ] "Search this area" button when user pans the map
+
+### Google Maps Integration — PM Property Portfolio Map
+- [ ] Map on PM profile page showing all properties they manage
+- [ ] Each property plotted as a pin/marker on the map
+- [ ] Hover/click on marker shows info card overlay:
+  - [ ] Property name & address
+  - [ ] Property type (condo, house, apartment, etc.)
+  - [ ] Thumbnail images carousel/gallery preview
+  - [ ] Status indicator (active, vacant, etc.)
+- [ ] Smooth card popup with image(s), address, and quick details
+- [ ] Click info card to navigate to full property detail (if applicable)
+- [ ] Fit map bounds to show all property markers
+- [ ] Responsive map sizing (full-width on mobile, side panel on desktop)
 
 ### Photo Gallery & Portfolio
 - [ ] Photo gallery for properties managed
 - [ ] Property cards with images
 - [ ] Image upload functionality
 - [ ] Portfolio grid layout
+
+### PM Onboarding Workflow
+- [ ] Multi-step onboarding wizard for new Property Managers
+  - [ ] Step 1: Personal Info — name, contact, profile photo
+  - [ ] Step 2: Business Details — company name, years of experience, bio
+  - [ ] Step 3: Services & Areas — select service types, define service areas
+  - [ ] Step 4: Verification — upload required documents:
+    - [ ] Government-issued ID
+    - [ ] Business permit / DTI registration
+    - [ ] Proof of address or office
+    - [ ] Professional license (if applicable)
+  - [ ] Step 5: Review & Submit — summary of all info before submission
+- [ ] Progress indicator (step bar / progress percentage)
+- [ ] Save draft & resume later functionality
+- [ ] "Pending Verification" status after submission
+- [ ] Admin verification queue — review documents, approve/reject with reason
+- [ ] Email notification on approval/rejection
+- [ ] Post-approval guided tour ("What's next" tips — add properties, complete portfolio)
+- [ ] Onboarding completion percentage on PM dashboard
+
+### Help Center, FAQ & Guides
+- [ ] Help center page (`/help`) with searchable topics
+- [ ] FAQ section with expandable accordion items:
+  - [ ] General: What is PM Finder? How does it work?
+  - [ ] For Property Owners: How to find a PM, how to send inquiries, how reviews work
+  - [ ] For Property Managers: How to create a profile, verification process, managing inquiries
+  - [ ] Account & Security: Password reset, account settings, privacy
+- [ ] Getting Started guides:
+  - [ ] Property Owner guide — searching, saving PMs, sending inquiries, leaving reviews
+  - [ ] Property Manager guide — onboarding, completing profile, responding to inquiries
+- [ ] Contextual help tooltips throughout the app
+- [ ] "Need help?" floating button or link in footer/header
+- [ ] Contact support form (or link to inquiry with admin)
+- [ ] Help articles / knowledge base with categories
+- [ ] Video tutorials or walkthrough GIFs (future)
 
 ### Enhanced Authentication
 - [ ] Social login (Google, Facebook)
@@ -142,4 +194,4 @@
 
 ---
 
-*Last Updated: February 4, 2026*
+*Last Updated: February 15, 2026*
