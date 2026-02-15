@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Storage;
 
 class PropertyManager extends Model
 {
@@ -67,10 +68,26 @@ class PropertyManager extends Model
         return $this->hasMany(Inquiry::class);
     }
 
+    public function galleryImages(): HasMany
+    {
+        return $this->hasMany(GalleryImage::class)->orderBy('sort_order');
+    }
+
     public function savedByUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'saved_property_managers')
             ->withTimestamps();
+    }
+
+    /**
+     * Get the full URL for the avatar image.
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if ($this->avatar && Storage::disk('public')->exists($this->avatar)) {
+            return Storage::disk('public')->url($this->avatar);
+        }
+        return null;
     }
 
     public function updateRating(): void
@@ -91,7 +108,7 @@ class PropertyManager extends Model
     /**
      * Append is_online to array/JSON serialization
      */
-    protected $appends = ['is_online'];
+    protected $appends = ['is_online', 'avatar_url'];
 
     /**
      * Get the is_online attribute

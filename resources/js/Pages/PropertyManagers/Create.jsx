@@ -1,12 +1,14 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
-import { Building2, Phone, MapPin, Briefcase, User } from 'lucide-react';
+import { Building2, Phone, MapPin, Briefcase, User, Camera, X } from 'lucide-react';
+import { useState, useRef } from 'react';
 
 export default function PropertyManagerCreate() {
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, errors, progress } = useForm({
         business_name: '',
         bio: '',
         phone: '',
+        avatar: null,
         services: [],
         service_types: [],
         address: '',
@@ -15,6 +17,25 @@ export default function PropertyManagerCreate() {
         barangay: '',
         service_radius_km: 10,
     });
+
+    const [avatarPreview, setAvatarPreview] = useState(null);
+    const avatarInputRef = useRef(null);
+
+    const handleAvatarChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setData('avatar', file);
+            const reader = new FileReader();
+            reader.onload = (e) => setAvatarPreview(e.target.result);
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const removeAvatar = () => {
+        setData('avatar', null);
+        setAvatarPreview(null);
+        if (avatarInputRef.current) avatarInputRef.current.value = '';
+    };
 
     const availableServices = [
         'Tenant Screening',
@@ -31,7 +52,9 @@ export default function PropertyManagerCreate() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(route('property-managers.store'));
+        post(route('property-managers.store'), {
+            forceFormData: true,
+        });
     };
 
     const toggleService = (service) => {
@@ -82,6 +105,62 @@ export default function PropertyManagerCreate() {
                                     placeholder="Your business or professional name"
                                 />
                                 {errors.business_name && <p className="mt-2 text-sm text-red-500">{errors.business_name}</p>}
+                            </div>
+
+                            {/* Profile Picture */}
+                            <div>
+                                <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                    <Camera className="w-4 h-4 text-primary" />
+                                    Profile Picture
+                                </label>
+                                <div className="flex items-center gap-6">
+                                    <div className="relative flex-shrink-0">
+                                        {avatarPreview ? (
+                                            <div className="relative">
+                                                <img 
+                                                    src={avatarPreview} 
+                                                    alt="Preview" 
+                                                    className="w-24 h-24 rounded-2xl object-cover border-2 border-primary/30 shadow-lg"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={removeAvatar}
+                                                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center shadow-md hover:bg-red-600 transition-colors"
+                                                >
+                                                    <X className="w-3 h-3" />
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary/10 to-purple-500/10 border-2 border-dashed border-border flex items-center justify-center">
+                                                <Camera className="w-8 h-8 text-muted-foreground/50" />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <input
+                                            ref={avatarInputRef}
+                                            type="file"
+                                            accept="image/jpeg,image/png,image/webp"
+                                            onChange={handleAvatarChange}
+                                            className="hidden"
+                                            id="avatar-upload"
+                                        />
+                                        <label
+                                            htmlFor="avatar-upload"
+                                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border text-sm font-medium text-foreground hover:border-primary/50 hover:bg-primary/5 cursor-pointer transition-all duration-200"
+                                        >
+                                            <Camera className="w-4 h-4" />
+                                            {avatarPreview ? 'Change Photo' : 'Upload Photo'}
+                                        </label>
+                                        <p className="text-xs text-muted-foreground mt-2">JPEG, PNG, or WebP. Max 2MB.</p>
+                                        {progress && (
+                                            <div className="mt-2 w-full bg-muted rounded-full h-1.5">
+                                                <div className="bg-primary h-1.5 rounded-full transition-all" style={{ width: `${progress.percentage}%` }} />
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                                {errors.avatar && <p className="mt-2 text-sm text-red-500">{errors.avatar}</p>}
                             </div>
 
                             {/* Bio */}

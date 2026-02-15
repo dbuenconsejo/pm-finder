@@ -48,6 +48,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/property-managers/{propertyManager}', [PropertyManagerController::class, 'destroy'])->name('property-managers.destroy');
     Route::post('/property-managers/{propertyManager}/toggle-save', [PropertyManagerController::class, 'toggleSave'])->name('property-managers.toggle-save');
 
+    // Gallery management
+    Route::post('/property-managers/{propertyManager}/gallery', [PropertyManagerController::class, 'uploadGallery'])->name('property-managers.gallery.upload');
+    Route::delete('/property-managers/{propertyManager}/gallery/{image}', [PropertyManagerController::class, 'deleteGalleryImage'])->name('property-managers.gallery.delete');
+
     // Inquiries
     Route::resource('inquiries', InquiryController::class);
     Route::post('/inquiries/{inquiry}/reply', [InquiryController::class, 'reply'])->name('inquiries.reply');

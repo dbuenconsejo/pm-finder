@@ -115,10 +115,20 @@ export default function SearchIndex({ propertyManagers, filters }) {
                                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                     <div className="relative p-6">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center shrink-0 ring-2 ring-primary/10">
-                                                <span className="text-2xl font-bold text-primary">
-                                                    {pm.business_name?.[0] || pm.user?.name?.[0] || 'P'}
-                                                </span>
+                                            <div className="w-16 h-16 rounded-full shrink-0 ring-2 ring-primary/10 overflow-hidden">
+                                                {pm.avatar_url ? (
+                                                    <img 
+                                                        src={pm.avatar_url} 
+                                                        alt={pm.business_name || pm.user?.name}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center">
+                                                        <span className="text-2xl font-bold text-primary">
+                                                            {pm.business_name?.[0] || pm.user?.name?.[0] || 'P'}
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="min-w-0 flex-1">
                                                 <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors truncate">

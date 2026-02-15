@@ -453,7 +453,70 @@ saved_pms
 
 ---
 
-## 🚧 Out of Scope (Future Phases)
+## � Media Uploads & Portfolio Management (Phase 1.5)
+
+### 6.1 Profile Picture Upload
+- Property managers can upload a **profile picture/avatar**
+- Displayed on: PM profile page, search results, PM cards, PM listings
+- Accepted formats: JPEG, PNG, WebP (max 2MB)
+- Images are stored in `storage/app/public/avatars/`
+- Automatic fallback to letter-initial avatar when no photo is uploaded
+
+### 6.2 Property Image Uploads
+- Each property in the portfolio can have a **cover image**
+- Displayed in the portfolio section of the PM profile
+- Accepted formats: JPEG, PNG, WebP (max 5MB)
+- Stored in `storage/app/public/properties/`
+
+### 6.3 Gallery Images
+- Property managers can upload **multiple gallery images** to showcase their work
+- Gallery appears as a dedicated section on the PM profile page
+- Lightbox-style viewing with click-to-enlarge
+- Accepted formats: JPEG, PNG, WebP (max 5MB each, up to 20 images)
+- Stored in `storage/app/public/gallery/`
+- Manageable from the Edit Profile page (add/remove)
+
+### 6.4 Database Schema
+
+```sql
+-- New table for gallery images
+gallery_images
+├── id (PK)
+├── property_manager_id (FK -> property_managers)
+├── image_path (string) -- path in storage
+├── caption (string, nullable)
+├── sort_order (integer, default 0)
+├── created_at
+└── updated_at
+
+-- Existing columns used:
+-- property_managers.avatar (string, nullable) -- profile picture path
+-- properties.image (string, nullable) -- property cover image path
+```
+
+### 6.5 Upload Endpoints
+| Method | Route | Purpose |
+|--------|-------|---------|
+| POST | `/property-managers` | Create PM with avatar |
+| PUT/POST | `/property-managers/{id}` | Update PM with avatar |
+| POST | `/property-managers/{id}/gallery` | Upload gallery images |
+| DELETE | `/property-managers/{id}/gallery/{image}` | Remove gallery image |
+
+### 6.6 Acceptance Criteria
+- [ ] PM can upload a profile picture during profile creation
+- [ ] PM can change/remove profile picture during profile editing
+- [ ] Profile picture shows in search results instead of letter avatar
+- [ ] Profile picture shows on PM profile page header
+- [ ] PM can upload a cover image for each property
+- [ ] PM can upload multiple gallery images
+- [ ] PM can remove gallery images
+- [ ] Gallery displays as a grid on the PM profile page
+- [ ] Images are properly validated (type, size)
+- [ ] Fallback to letter avatar when no photo exists
+
+---
+
+## �🚧 Out of Scope (Future Phases)
 
 | Feature | Phase |
 |---------|-------|

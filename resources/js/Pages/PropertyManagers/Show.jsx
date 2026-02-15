@@ -1,12 +1,14 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import { useState } from 'react';
 import { useTheme } from '@/Contexts/ThemeContext';
-import { Star, MapPin, Phone, CheckCircle, Heart, MessageSquare, Building2, Shield, Clock, ArrowLeft, Sun, Moon } from 'lucide-react';
+import { Star, MapPin, Phone, CheckCircle, Heart, MessageSquare, Building2, Shield, Clock, ArrowLeft, Sun, Moon, Image as ImageIcon, X as XIcon } from 'lucide-react';
 
 export default function PropertyManagerShow({ propertyManager, isSaved }) {
     const { auth } = usePage().props;
     const { darkMode, toggleDarkMode } = useTheme();
+    const [lightboxImage, setLightboxImage] = useState(null);
 
     const handleToggleSave = () => {
         router.post(route('property-managers.toggle-save', propertyManager.id));
@@ -41,10 +43,20 @@ export default function PropertyManagerShow({ propertyManager, isSaved }) {
                                         {/* Avatar with gradient ring */}
                                         <div className="relative flex-shrink-0">
                                             <div className="absolute -inset-1.5 bg-gradient-to-br from-primary to-purple-600 rounded-2xl blur opacity-50" />
-                                            <div className="relative h-24 w-24 rounded-2xl bg-gradient-to-br from-primary/10 to-purple-500/10 dark:from-primary/20 dark:to-purple-500/20 border-2 border-primary/30 flex items-center justify-center">
-                                                <span className="text-4xl font-bold bg-gradient-to-br from-primary to-purple-600 bg-clip-text text-transparent">
-                                                    {propertyManager.business_name?.[0] || propertyManager.user?.name?.[0] || 'P'}
-                                                </span>
+                                            <div className="relative h-24 w-24 rounded-2xl border-2 border-primary/30 overflow-hidden">
+                                                {propertyManager.avatar_url ? (
+                                                    <img 
+                                                        src={propertyManager.avatar_url} 
+                                                        alt={propertyManager.business_name || propertyManager.user?.name}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full bg-gradient-to-br from-primary/10 to-purple-500/10 dark:from-primary/20 dark:to-purple-500/20 flex items-center justify-center">
+                                                        <span className="text-4xl font-bold bg-gradient-to-br from-primary to-purple-600 bg-clip-text text-transparent">
+                                                            {propertyManager.business_name?.[0] || propertyManager.user?.name?.[0] || 'P'}
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </div>
                                             {/* Online indicator */}
                                             {propertyManager.is_online && (
@@ -183,10 +195,19 @@ export default function PropertyManagerShow({ propertyManager, isSaved }) {
                                             {propertyManager.properties.map((property) => (
                                                 <div 
                                                     key={property.id} 
-                                                    className="group relative overflow-hidden rounded-xl border border-border/50 p-5 hover:border-primary/30 transition-all duration-300"
+                                                    className="group relative overflow-hidden rounded-xl border border-border/50 hover:border-primary/30 transition-all duration-300"
                                                 >
+                                                    {property.image_url && (
+                                                        <div className="aspect-video overflow-hidden">
+                                                            <img 
+                                                                src={property.image_url} 
+                                                                alt={property.title}
+                                                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                            />
+                                                        </div>
+                                                    )}
                                                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                                    <div className="relative">
+                                                    <div className="relative p-5">
                                                         <h3 className="font-semibold text-foreground">{property.title}</h3>
                                                         <p className="text-sm text-primary mt-1">{property.property_type}</p>
                                                         <p className="text-sm text-muted-foreground mt-2 flex items-center gap-1.5">
@@ -195,6 +216,39 @@ export default function PropertyManagerShow({ propertyManager, isSaved }) {
                                                         </p>
                                                     </div>
                                                 </div>
+                                            ))}
+                                        </div>
+                                    </section>
+                                )}
+
+                                {/* Gallery */}
+                                {propertyManager.gallery_images && propertyManager.gallery_images.length > 0 && (
+                                    <section>
+                                        <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                                            <div className="w-1 h-5 bg-gradient-to-b from-primary to-purple-600 rounded-full" />
+                                            <ImageIcon className="w-5 h-5 text-primary" />
+                                            Gallery
+                                            <span className="text-sm font-normal text-muted-foreground">({propertyManager.gallery_images.length})</span>
+                                        </h2>
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                            {propertyManager.gallery_images.map((image) => (
+                                                <button
+                                                    key={image.id}
+                                                    onClick={() => setLightboxImage(image)}
+                                                    className="group relative aspect-square rounded-xl overflow-hidden border border-border/50 hover:border-primary/30 transition-all duration-300 cursor-pointer"
+                                                >
+                                                    <img
+                                                        src={`/storage/${image.image_path}`}
+                                                        alt={image.caption || 'Gallery image'}
+                                                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                                    />
+                                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                                                    {image.caption && (
+                                                        <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                            <p className="text-xs text-white truncate">{image.caption}</p>
+                                                        </div>
+                                                    )}
+                                                </button>
                                             ))}
                                         </div>
                                     </section>
@@ -323,6 +377,32 @@ export default function PropertyManagerShow({ propertyManager, isSaved }) {
                     </div>
                 </div>
             </div>
+
+            {/* Lightbox Modal */}
+            {lightboxImage && (
+                <div 
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+                    onClick={() => setLightboxImage(null)}
+                >
+                    <button
+                        onClick={() => setLightboxImage(null)}
+                        className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors"
+                    >
+                        <XIcon className="w-6 h-6" />
+                    </button>
+                    <img
+                        src={`/storage/${lightboxImage.image_path}`}
+                        alt={lightboxImage.caption || 'Gallery image'}
+                        className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                    {lightboxImage.caption && (
+                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 px-6 py-3 rounded-full bg-black/60 text-white text-sm">
+                            {lightboxImage.caption}
+                        </div>
+                    )}
+                </div>
+            )}
         </>
     );
 

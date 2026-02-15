@@ -79,14 +79,24 @@ export default function PropertyManagersIndex({ propertyManagers }) {
                                         {/* Avatar with gradient ring */}
                                         <div className="relative flex-shrink-0">
                                             <div className="absolute -inset-1 bg-gradient-to-br from-primary to-purple-600 rounded-full opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300" />
-                                            <div className={`relative rounded-full bg-gradient-to-br from-primary to-purple-600 border-2 border-primary/30 group-hover:border-primary/50 flex items-center justify-center transition-all duration-300 shadow-md ${
+                                            <div className={`relative rounded-full border-2 border-primary/30 group-hover:border-primary/50 transition-all duration-300 shadow-md overflow-hidden ${
                                                 viewMode === 'list' ? 'h-12 w-12' : 'h-16 w-16'
                                             }`}>
-                                                <span className={`font-bold text-white ${
-                                                    viewMode === 'list' ? 'text-lg' : 'text-2xl'
-                                                }`}>
-                                                    {pm.business_name?.[0] || pm.user?.name?.[0] || 'P'}
-                                                </span>
+                                                {pm.avatar_url ? (
+                                                    <img 
+                                                        src={pm.avatar_url} 
+                                                        alt={pm.business_name || pm.user?.name}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
+                                                        <span className={`font-bold text-white ${
+                                                            viewMode === 'list' ? 'text-lg' : 'text-2xl'
+                                                        }`}>
+                                                            {pm.business_name?.[0] || pm.user?.name?.[0] || 'P'}
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </div>
                                             {/* Online indicator */}
                                             {pm.is_online && (

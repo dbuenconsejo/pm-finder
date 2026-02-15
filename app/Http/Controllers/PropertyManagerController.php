@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\PropertyManager;
 use App\Models\Property;
+use App\Models\GalleryImage;
 use App\Models\ServiceArea;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class PropertyManagerController extends Controller
@@ -41,6 +43,7 @@ class PropertyManagerController extends Controller
             'business_name' => 'nullable|string|max:255',
             'bio' => 'nullable|string',
             'phone' => 'nullable|string|max:20',
+            'avatar' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
             'services' => 'nullable|array',
             'service_types' => 'nullable|array',
             'address' => 'nullable|string|max:255',
@@ -51,6 +54,13 @@ class PropertyManagerController extends Controller
             'longitude' => 'nullable|numeric',
             'service_radius_km' => 'nullable|numeric|min:1|max:100',
         ]);
+
+        // Handle avatar upload
+        if ($request->hasFile('avatar')) {
+            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        unset($validated['avatar_file']); // safety cleanup
 
         $propertyManager = PropertyManager::create([
             ...$validated,
@@ -71,7 +81,7 @@ class PropertyManagerController extends Controller
     {
         $propertyManager->increment('profile_views');
 
-        $propertyManager->load(['user', 'properties', 'serviceAreas', 'reviews.user']);
+        $propertyManager->load(['user', 'properties', 'serviceAreas', 'reviews.user', 'galleryImages']);
 
         $isSaved = auth()->check() 
             ? auth()->user()->savedPropertyManagers()->where('property_manager_id', $propertyManager->id)->exists()
@@ -90,7 +100,7 @@ class PropertyManagerController extends Controller
     {
         $this->authorize('update', $propertyManager);
 
-        $propertyManager->load(['properties', 'serviceAreas']);
+        $propertyManager->load(['properties', 'serviceAreas', 'galleryImages']);
 
         return Inertia::render('PropertyManagers/Edit', [
             'propertyManager' => $propertyManager,
@@ -108,6 +118,8 @@ class PropertyManagerController extends Controller
             'business_name' => 'nullable|string|max:255',
             'bio' => 'nullable|string',
             'phone' => 'nullable|string|max:20',
+            'avatar' => 'nullable|image|mimes:jpeg,png,webp|max:2048',
+            'remove_avatar' => 'nullable|boolean',
             'services' => 'nullable|array',
             'service_types' => 'nullable|array',
             'address' => 'nullable|string|max:255',
@@ -119,6 +131,26 @@ class PropertyManagerController extends Controller
             'service_radius_km' => 'nullable|numeric|min:1|max:100',
             'is_available' => 'boolean',
         ]);
+
+        // Handle avatar removal
+        if ($request->boolean('remove_avatar')) {
+            if ($propertyManager->avatar) {
+                Storage::disk('public')->delete($propertyManager->avatar);
+            }
+            $validated['avatar'] = null;
+        }
+        // Handle avatar upload
+        elseif ($request->hasFile('avatar')) {
+            // Delete old avatar
+            if ($propertyManager->avatar) {
+                Storage::disk('public')->delete($propertyManager->avatar);
+            }
+            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        } else {
+            unset($validated['avatar']);
+        }
+
+        unset($validated['remove_avatar']);
 
         $propertyManager->update($validated);
 
@@ -133,10 +165,76 @@ class PropertyManagerController extends Controller
     {
         $this->authorize('delete', $propertyManager);
 
+        // Clean up uploaded files
+        if ($propertyManager->avatar) {
+            Storage::disk('public')->delete($propertyManager->avatar);
+        }
+        foreach ($propertyManager->galleryImages as $image) {
+            Storage::disk('public')->delete($image->image_path);
+        }
+        foreach ($propertyManager->properties as $property) {
+            if ($property->image) {
+                Storage::disk('public')->delete($property->image);
+            }
+        }
+
         $propertyManager->delete();
 
         return redirect()->route('dashboard')
             ->with('success', 'Profile deleted successfully!');
+    }
+
+    /**
+     * Upload gallery images.
+     */
+    public function uploadGallery(Request $request, PropertyManager $propertyManager)
+    {
+        $this->authorize('update', $propertyManager);
+
+        $request->validate([
+            'images' => 'required|array|max:20',
+            'images.*' => 'image|mimes:jpeg,png,webp|max:5120',
+            'captions' => 'nullable|array',
+            'captions.*' => 'nullable|string|max:255',
+        ]);
+
+        $currentCount = $propertyManager->galleryImages()->count();
+        $maxImages = 20;
+
+        if ($currentCount >= $maxImages) {
+            return back()->withErrors(['images' => 'Maximum of 20 gallery images allowed.']);
+        }
+
+        $allowedCount = min(count($request->file('images')), $maxImages - $currentCount);
+        $sortOrder = $currentCount;
+
+        foreach (array_slice($request->file('images'), 0, $allowedCount) as $index => $image) {
+            $path = $image->store('gallery', 'public');
+            $propertyManager->galleryImages()->create([
+                'image_path' => $path,
+                'caption' => $request->input("captions.{$index}"),
+                'sort_order' => $sortOrder++,
+            ]);
+        }
+
+        return back()->with('success', 'Gallery images uploaded successfully!');
+    }
+
+    /**
+     * Remove a gallery image.
+     */
+    public function deleteGalleryImage(PropertyManager $propertyManager, GalleryImage $image)
+    {
+        $this->authorize('update', $propertyManager);
+
+        if ($image->property_manager_id !== $propertyManager->id) {
+            abort(403);
+        }
+
+        Storage::disk('public')->delete($image->image_path);
+        $image->delete();
+
+        return back()->with('success', 'Image removed.');
     }
 
     /**
