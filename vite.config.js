@@ -15,12 +15,12 @@ export default defineConfig({
         port: 5173,
         strictPort: true,
         hmr: {
-            host: 'localhost',
-            port: 5174,
+            host: '10.0.0.130',
+            clientPort: 5174,
         },
-        origin: 'http://localhost:5174',
+        origin: 'http://10.0.0.130:5174',
         cors: {
-            origin: 'http://localhost:8888',
+            origin: 'http://10.0.0.130:8888',
             credentials: true,
         },
     },
