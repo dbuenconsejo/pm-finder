@@ -15,11 +15,15 @@ class Property extends Model
         'property_type',
         'image',
         'location',
+        'latitude',
+        'longitude',
         'is_featured',
     ];
 
     protected $casts = [
         'is_featured' => 'boolean',
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
     ];
 
     protected $appends = ['image_url'];
