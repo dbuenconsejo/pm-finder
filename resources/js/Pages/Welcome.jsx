@@ -1,7 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { useTheme } from '@/Contexts/ThemeContext';
 import ApplicationLogo from '@/Components/ApplicationLogo';
-import MapSearch from '@/Components/MapSearch';
+import InteractiveMap from '@/Components/InteractiveMap';
 import { Sun, Moon, Search, MapPin, Shield, MessageCircle, Star, ArrowRight, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -157,7 +157,7 @@ export default function Welcome({ auth }) {
                                 </div>
                                 
                                 <div className="mt-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-                                    <MapSearch />
+                                    <InteractiveMap mode="discovery" />
                                 </div>
                             </div>
                         </div>

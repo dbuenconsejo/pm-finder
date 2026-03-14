@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import ApplicationLogo from '@/Components/ApplicationLogo';
-import MapSearch from '@/Components/MapSearch';
+import InteractiveMap from '@/Components/InteractiveMap';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { useTheme } from '@/Contexts/ThemeContext';
@@ -229,8 +229,9 @@ export default function PropertyManagerShow({ propertyManager, isSaved }) {
                                             <div className="w-1 h-5 bg-gradient-to-b from-primary to-purple-600 rounded-full" />
                                             Portfolio Locations
                                         </h2>
-                                        <MapSearch 
-                                            points={propertyManager.properties} 
+                                        <InteractiveMap 
+                                            mode="portfolio"
+                                            items={propertyManager.properties} 
                                             height="400px"
                                             className="mb-8"
                                         />
