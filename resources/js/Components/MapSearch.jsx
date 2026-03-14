@@ -2,26 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Star, CheckCircle, MapPin, Navigation } from 'lucide-react';
+import { Star, CheckCircle, MapPin, Navigation, ArrowRight } from 'lucide-react';
 import axios from 'axios';
 import { useTheme } from '@/Contexts/ThemeContext';
+import { renderToStaticMarkup } from 'react-dom/server';
 
-// Fix for default Leaflet icon issues with Vite
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerIconRetina from 'leaflet/dist/images/marker-icon-2x.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+// Custom Purple Marker Icon using Lucide MapPin
+const createCustomIcon = () => {
+    const iconHtml = renderToStaticMarkup(
+        <div className="relative flex items-center justify-center">
+            {/* Pulsing background effect */}
+            <div className="absolute w-10 h-10 bg-primary/20 rounded-full animate-ping" />
+            {/* Marker background */}
+            <div className="relative flex items-center justify-center w-9 h-9 bg-primary rounded-full border-2 border-white shadow-lg shadow-primary/40">
+                <MapPin className="w-5 h-5 text-white" />
+            </div>
+            {/* Triangle pointer */}
+            <div className="absolute -bottom-1 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-primary" />
+        </div>
+    );
 
-let DefaultIcon = L.icon({
-    iconUrl: markerIcon,
-    iconRetinaUrl: markerIconRetina,
-    shadowUrl: markerShadow,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-});
-
-L.Marker.prototype.options.icon = DefaultIcon;
+    return L.divIcon({
+        html: iconHtml,
+        className: 'custom-leaflet-icon',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40],
+    });
+};
 
 // Custom component to handle map centering
 function ChangeView({ center, zoom }) {
@@ -41,6 +49,7 @@ export default function MapSearch({ className = '', initialLocation = '' }) {
     const [center, setCenter] = useState([12.8797, 121.7740]); // Philippines center
     const [zoom, setZoom] = useState(6);
     const { darkMode } = useTheme();
+    const [customIcon, setCustomIcon] = useState(null);
 
     async function fetchMapData(location = '') {
         try {
@@ -50,8 +59,6 @@ export default function MapSearch({ className = '', initialLocation = '' }) {
             });
             setManagers(response.data);
             
-            // If we have a specific location searched, we might want to adjust the map
-            // For now, we'll keep the Philippines view or center on the first result if searching
             if (location && response.data.length > 0) {
                 const first = response.data[0];
                 setCenter([parseFloat(first.latitude), parseFloat(first.longitude)]);
@@ -66,28 +73,30 @@ export default function MapSearch({ className = '', initialLocation = '' }) {
 
     useEffect(() => {
         setIsClient(true);
+        setCustomIcon(createCustomIcon());
         fetchMapData();
     }, []);
 
     if (!isClient) {
         return (
-            <div className={`w-full h-[500px] rounded-2xl bg-muted/20 animate-pulse border border-border ${className}`} />
+            <div className={`w-full h-[550px] rounded-3xl bg-muted/20 animate-pulse border-2 border-primary/20 ${className}`} />
         );
     }
 
-    // Dark mode map tiles (CartoDB Dark Matter)
-    // Light mode map tiles (CartoDB Positron)
     const tileUrl = darkMode 
         ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
         : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
 
     return (
-        <div className={`relative w-full h-[500px] rounded-2xl overflow-hidden border border-border shadow-xl ${className}`}>
+        <div className={`relative w-full h-[550px] rounded-3xl overflow-hidden border-2 border-primary/30 shadow-[0_0_50px_-12px_rgba(139,92,246,0.3)] group ${className}`}>
             {loading && (
-                <div className="absolute inset-0 z-[1000] bg-background/50 backdrop-blur-sm flex items-center justify-center">
-                    <div className="flex flex-col items-center gap-2">
-                        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-                        <span className="text-sm font-medium text-muted-foreground">Loading Map...</span>
+                <div className="absolute inset-0 z-[1002] bg-background/60 backdrop-blur-md flex items-center justify-center">
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="relative">
+                            <div className="w-16 h-16 border-4 border-primary/20 rounded-full" />
+                            <div className="absolute inset-0 w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+                        </div>
+                        <span className="text-sm font-bold text-primary animate-pulse uppercase tracking-widest">Scanning Network...</span>
                     </div>
                 </div>
             )}
@@ -98,6 +107,7 @@ export default function MapSearch({ className = '', initialLocation = '' }) {
                 style={{ height: '100%', width: '100%' }}
                 scrollWheelZoom={false}
                 zoomControl={false}
+                className="z-10"
             >
                 <ChangeView center={center} zoom={zoom} />
                 <TileLayer
@@ -105,39 +115,45 @@ export default function MapSearch({ className = '', initialLocation = '' }) {
                     url={tileUrl}
                 />
                 
-                {managers.map((pm) => (
+                {customIcon && managers.map((pm) => (
                     <Marker 
                         key={pm.id} 
                         position={[parseFloat(pm.latitude), parseFloat(pm.longitude)]}
+                        icon={customIcon}
                     >
-                        <Popup className="custom-popup">
-                            <div className="p-1 min-w-[180px]">
-                                <h3 className="font-bold text-gray-900 dark:text-white m-0 leading-tight">
-                                    {pm.business_name}
-                                </h3>
-                                <p className="text-xs text-gray-500 flex items-center gap-1 mt-1 mb-2">
-                                    <MapPin className="w-3 h-3" />
+                        <Popup className="custom-popup" maxWidth={250}>
+                            <div className="p-4">
+                                <div className="flex items-center gap-3 mb-3">
+                                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold">
+                                        {pm.business_name?.[0] || 'P'}
+                                    </div>
+                                    <div className="min-w-0">
+                                        <h3 className="font-bold text-gray-900 dark:text-white m-0 leading-tight truncate">
+                                            {pm.business_name}
+                                        </h3>
+                                        <div className="flex items-center gap-1.5 mt-0.5">
+                                            <div className="flex items-center">
+                                                <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+                                                <span className="ml-1 text-xs font-bold text-gray-700 dark:text-gray-300">{pm.rating}</span>
+                                            </div>
+                                            {pm.is_verified && (
+                                                <CheckCircle className="w-3 h-3 text-emerald-500" />
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mb-4">
+                                    <MapPin className="w-3.5 h-3.5 text-primary/70" />
                                     {pm.city}, {pm.province}
                                 </p>
                                 
-                                <div className="flex items-center gap-2 mb-3">
-                                    <div className="flex items-center">
-                                        <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                                        <span className="ml-1 text-xs font-bold">{pm.rating}</span>
-                                    </div>
-                                    {pm.is_verified && (
-                                        <div className="flex items-center gap-0.5 text-emerald-600">
-                                            <CheckCircle className="w-3 h-3" />
-                                            <span className="text-[10px] font-bold uppercase tracking-wider">Verified</span>
-                                        </div>
-                                    )}
-                                </div>
-                                
                                 <a 
                                     href={route('property-managers.show', pm.id)}
-                                    className="block w-full text-center py-2 px-3 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/90 transition-colors"
+                                    className="flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-gradient-to-r from-primary to-purple-600 text-white text-xs font-bold rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 group/btn"
                                 >
-                                    View Profile
+                                    View Full Profile
+                                    <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
                                 </a>
                             </div>
                         </Popup>
@@ -145,10 +161,21 @@ export default function MapSearch({ className = '', initialLocation = '' }) {
                 ))}
 
                 {/* Legend/Info Overlay */}
-                <div className="absolute bottom-4 left-4 z-[1000] bg-card/90 backdrop-blur-md p-3 rounded-xl border border-border shadow-lg pointer-events-none">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
-                        <Navigation className="w-3 h-3 text-primary" />
-                        <span>Showing {managers.length} Managers across Philippines</span>
+                <div className="absolute top-6 right-6 z-[1000]">
+                    <div className="bg-card/90 backdrop-blur-xl p-3 px-5 rounded-2xl border border-primary/20 shadow-xl flex items-center gap-3">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                        <span className="text-xs font-bold text-foreground uppercase tracking-wider">
+                            {managers.length} Active Managers Found
+                        </span>
+                    </div>
+                </div>
+
+                <div className="absolute bottom-6 left-6 z-[1000] flex flex-col gap-2">
+                    <div className="bg-card/90 backdrop-blur-xl p-3 px-4 rounded-2xl border border-primary/20 shadow-xl pointer-events-none max-w-[200px]">
+                        <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">Interactive Map</p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                            Click on a marker to see manager details and explore services in your area.
+                        </p>
                     </div>
                 </div>
             </MapContainer>
