@@ -47,8 +47,8 @@ class PropertyManagerSeeder extends Seeder
                     ['province' => 'Metro Manila', 'city' => 'Taguig', 'barangay' => 'BGC'],
                 ],
                 'properties' => [
-                    ['title' => 'Modern 2BR Condo in Makati', 'description' => 'Fully furnished 2-bedroom condo with city view', 'property_type' => 'Condo', 'location' => 'Makati CBD'],
-                    ['title' => 'Cozy Studio in Legaspi Village', 'description' => 'Perfect for young professionals', 'property_type' => 'Condo', 'location' => 'Legaspi Village, Makati'],
+                    ['title' => 'Modern 2BR Condo in Makati', 'description' => 'Fully furnished 2-bedroom condo with city view', 'property_type' => 'Condo', 'location' => 'Makati CBD', 'latitude' => 14.5547, 'longitude' => 121.0244],
+                    ['title' => 'Cozy Studio in Legaspi Village', 'description' => 'Perfect for young professionals', 'property_type' => 'Condo', 'location' => 'Legaspi Village, Makati', 'latitude' => 14.5528, 'longitude' => 121.0157],
                 ],
             ],
             [
@@ -80,8 +80,8 @@ class PropertyManagerSeeder extends Seeder
                     ['province' => 'Metro Manila', 'city' => 'Quezon City', 'barangay' => 'Cubao'],
                 ],
                 'properties' => [
-                    ['title' => 'Spacious 3BR House in QC', 'description' => 'Large family home with garden', 'property_type' => 'Residential', 'location' => 'Quezon City'],
-                    ['title' => 'Townhouse near Tomas Morato', 'description' => '2-storey townhouse, perfect for families', 'property_type' => 'Residential', 'location' => 'South Triangle, QC'],
+                    ['title' => 'Spacious 3BR House in QC', 'description' => 'Large family home with garden', 'property_type' => 'Residential', 'location' => 'Quezon City', 'latitude' => 14.6507, 'longitude' => 121.0483],
+                    ['title' => 'Townhouse near Tomas Morato', 'description' => '2-storey townhouse, perfect for families', 'property_type' => 'Residential', 'location' => 'South Triangle, QC', 'latitude' => 14.6360, 'longitude' => 121.0371],
                 ],
             ],
             [
@@ -112,8 +112,8 @@ class PropertyManagerSeeder extends Seeder
                     ['province' => 'Metro Manila', 'city' => 'Mandaluyong', 'barangay' => 'Shaw Boulevard'],
                 ],
                 'properties' => [
-                    ['title' => 'Prime Office Space in Ortigas', 'description' => '500 sqm office space with parking', 'property_type' => 'Commercial', 'location' => 'Ortigas Center'],
-                    ['title' => 'Retail Space in Shaw', 'description' => 'Ground floor retail with high foot traffic', 'property_type' => 'Commercial', 'location' => 'Shaw Boulevard'],
+                    ['title' => 'Prime Office Space in Ortigas', 'description' => '500 sqm office space with parking', 'property_type' => 'Commercial', 'location' => 'Ortigas Center', 'latitude' => 14.5855, 'longitude' => 121.0594],
+                    ['title' => 'Retail Space in Shaw', 'description' => 'Ground floor retail with high foot traffic', 'property_type' => 'Commercial', 'location' => 'Shaw Boulevard', 'latitude' => 14.5818, 'longitude' => 121.0536],
                 ],
             ],
             [
@@ -145,8 +145,8 @@ class PropertyManagerSeeder extends Seeder
                     ['province' => 'Batangas', 'city' => 'Lian', 'barangay' => null],
                 ],
                 'properties' => [
-                    ['title' => 'Tagaytay Staycation House', 'description' => 'Beautiful vacation home with Taal view', 'property_type' => 'Vacation Rental', 'location' => 'Tagaytay, Cavite'],
-                    ['title' => 'Beach House in Nasugbu', 'description' => 'Beachfront property perfect for family getaways', 'property_type' => 'Vacation Rental', 'location' => 'Nasugbu, Batangas'],
+                    ['title' => 'Tagaytay Staycation House', 'description' => 'Beautiful vacation home with Taal view', 'property_type' => 'Vacation Rental', 'location' => 'Tagaytay, Cavite', 'latitude' => 14.1197, 'longitude' => 120.9412],
+                    ['title' => 'Beach House in Nasugbu', 'description' => 'Beachfront property perfect for family getaways', 'property_type' => 'Vacation Rental', 'location' => 'Nasugbu, Batangas', 'latitude' => 14.0708, 'longitude' => 120.6303],
                 ],
             ],
             [
@@ -178,9 +178,9 @@ class PropertyManagerSeeder extends Seeder
                     ['province' => 'Metro Manila', 'city' => 'Makati', 'barangay' => 'Poblacion'],
                 ],
                 'properties' => [
-                    ['title' => 'Luxury 1BR in BGC', 'description' => 'High-end condo with amenities', 'property_type' => 'Condo', 'location' => 'BGC, Taguig'],
-                    ['title' => '3BR in McKinley Hill', 'description' => 'Spacious family unit with great views', 'property_type' => 'Condo', 'location' => 'McKinley Hill, Taguig'],
-                    ['title' => 'Penthouse in Makati', 'description' => 'Premium penthouse unit', 'property_type' => 'Condo', 'location' => 'Poblacion, Makati'],
+                    ['title' => 'Luxury 1BR in BGC', 'description' => 'High-end condo with amenities', 'property_type' => 'Condo', 'location' => 'BGC, Taguig', 'latitude' => 14.5409, 'longitude' => 121.0503],
+                    ['title' => '3BR in McKinley Hill', 'description' => 'Spacious family unit with great views', 'property_type' => 'Condo', 'location' => 'McKinley Hill, Taguig', 'latitude' => 14.5327, 'longitude' => 121.0528],
+                    ['title' => 'Penthouse in Makati', 'description' => 'Premium penthouse unit', 'property_type' => 'Condo', 'location' => 'Poblacion, Makati', 'latitude' => 14.5623, 'longitude' => 121.0315],
                 ],
             ],
             [
@@ -213,8 +213,8 @@ class PropertyManagerSeeder extends Seeder
                     ['province' => 'Cavite', 'city' => 'Bacoor', 'barangay' => null],
                 ],
                 'properties' => [
-                    ['title' => 'Affordable House in Santa Rosa', 'description' => '2BR house perfect for small families', 'property_type' => 'Residential', 'location' => 'Santa Rosa, Laguna'],
-                    ['title' => 'Subdivision House in Imus', 'description' => 'Newly built house in gated community', 'property_type' => 'Residential', 'location' => 'Imus, Cavite'],
+                    ['title' => 'Affordable House in Santa Rosa', 'description' => '2BR house perfect for small families', 'property_type' => 'Residential', 'location' => 'Santa Rosa, Laguna', 'latitude' => 14.2131, 'longitude' => 121.1025],
+                    ['title' => 'Subdivision House in Imus', 'description' => 'Newly built house in gated community', 'property_type' => 'Residential', 'location' => 'Imus, Cavite', 'latitude' => 14.3983, 'longitude' => 120.9414],
                 ],
             ],
             [
@@ -245,8 +245,8 @@ class PropertyManagerSeeder extends Seeder
                     ['province' => 'Metro Manila', 'city' => 'Makati', 'barangay' => 'Salcedo Village'],
                 ],
                 'properties' => [
-                    ['title' => 'Exclusive Unit at The Proscenium', 'description' => 'Ultra-luxury 3BR with premium finishes', 'property_type' => 'Condo', 'location' => 'Rockwell, Makati'],
-                    ['title' => 'Joya Lofts Penthouse', 'description' => 'Stunning penthouse with panoramic views', 'property_type' => 'Condo', 'location' => 'Rockwell, Makati'],
+                    ['title' => 'Exclusive Unit at The Proscenium', 'description' => 'Ultra-luxury 3BR with premium finishes', 'property_type' => 'Condo', 'location' => 'Rockwell, Makati', 'latitude' => 14.5668, 'longitude' => 121.0372],
+                    ['title' => 'Joya Lofts Penthouse', 'description' => 'Stunning penthouse with panoramic views', 'property_type' => 'Condo', 'location' => 'Rockwell, Makati', 'latitude' => 14.5645, 'longitude' => 121.0360],
                 ],
             ],
             [
@@ -279,8 +279,8 @@ class PropertyManagerSeeder extends Seeder
                     ['province' => 'Cebu', 'city' => 'Lapu-Lapu', 'barangay' => null],
                 ],
                 'properties' => [
-                    ['title' => 'IT Park Condo Unit', 'description' => 'Modern condo near tech companies', 'property_type' => 'Condo', 'location' => 'IT Park, Cebu'],
-                    ['title' => 'Office Space in Cebu Business Park', 'description' => 'Prime commercial space', 'property_type' => 'Commercial', 'location' => 'Cebu Business Park'],
+                    ['title' => 'IT Park Condo Unit', 'description' => 'Modern condo near tech companies', 'property_type' => 'Condo', 'location' => 'IT Park, Cebu', 'latitude' => 10.3292, 'longitude' => 123.9061],
+                    ['title' => 'Office Space in Cebu Business Park', 'description' => 'Prime commercial space', 'property_type' => 'Commercial', 'location' => 'Cebu Business Park', 'latitude' => 10.3174, 'longitude' => 123.9051],
                 ],
             ],
         ];

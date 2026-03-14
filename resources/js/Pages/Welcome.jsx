@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { useTheme } from '@/Contexts/ThemeContext';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import InteractiveMap from '@/Components/InteractiveMap';
 import { Sun, Moon, Search, MapPin, Shield, MessageCircle, Star, ArrowRight, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -56,7 +57,7 @@ export default function Welcome({ auth }) {
                 </div>
 
                 {/* Navigation */}
-                <nav className="border-b border-border/50 bg-background/60 backdrop-blur-xl fixed top-0 left-0 right-0 z-50 shadow-sm">
+                <nav className="border-b border-border/50 bg-background/60 backdrop-blur-xl fixed top-0 left-0 right-0 z-[1001] shadow-sm">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex h-16 justify-between items-center">
                             <div className="flex items-center">
@@ -153,6 +154,10 @@ export default function Welcome({ auth }) {
                                             {city}
                                         </a>
                                     ))}
+                                </div>
+                                
+                                <div className="mt-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                                    <InteractiveMap mode="discovery" />
                                 </div>
                             </div>
                         </div>
