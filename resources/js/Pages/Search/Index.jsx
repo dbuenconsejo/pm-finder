@@ -242,7 +242,7 @@ export default function SearchIndex({ propertyManagers, filters }) {
     // Guest users get a simple nav
     return (
         <div className="min-h-screen bg-background hex-pattern">
-            <nav className="sticky top-0 z-50 border-b border-border/50 bg-card/80 backdrop-blur-md">
+            <nav className="sticky top-0 z-[1001] border-b border-border/50 bg-card/80 backdrop-blur-md">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between items-center">
                         <Link href="/" className="transition-transform hover:scale-105">

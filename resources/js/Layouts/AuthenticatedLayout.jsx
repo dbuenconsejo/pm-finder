@@ -43,7 +43,7 @@ export default function AuthenticatedLayout({ header, children }) {
             </div>
 
             <nav className={cn(
-                "border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-50 shadow-sm",
+                "border-b border-border/50 bg-card/80 backdrop-blur-xl sticky top-0 z-[1001] shadow-sm",
                 isAdmin && "border-purple-500/20"
             )}>
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
