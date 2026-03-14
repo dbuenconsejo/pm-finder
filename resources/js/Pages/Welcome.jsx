@@ -154,6 +154,10 @@ export default function Welcome({ auth }) {
                                         </a>
                                     ))}
                                 </div>
+                                
+                                <div className="mt-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                                    <MapSearch />
+                                </div>
                             </div>
                         </div>
                     </div>
